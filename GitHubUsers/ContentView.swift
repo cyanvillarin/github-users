@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  github-users
+//  GitHubUsers
 //
 //  Created by CyanCamit.Villari on 2023/10/04.
 //
