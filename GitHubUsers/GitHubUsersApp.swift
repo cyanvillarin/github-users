@@ -1,6 +1,6 @@
 //
-//  github_usersApp.swift
-//  github-users
+//  GitHubUsersApp.swift
+//  GitHubUsers
 //
 //  Created by CyanCamit.Villari on 2023/10/04.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct github_usersApp: App {
+struct GitHubUsersApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
