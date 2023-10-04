@@ -16,12 +16,14 @@ struct UserItemView: View {
     }
     
     var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "person")
-                .resizable()
-                .frame(width: 50, height: 50)
-            
-            Text(userName)
+        NavigationLink(destination: UserDetailsView()) {
+            HStack(spacing: 10) {
+                Image(systemName: "person")
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                
+                Text(userName)
+            }
         }
     }
 }
