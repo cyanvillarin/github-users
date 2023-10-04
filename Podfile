@@ -8,9 +8,6 @@ target 'GitHubUsers' do
   # Pods for GitHubUsers
   pod 'Kingfisher'	# Images
   pod 'Alamofire'       # Networking
-  pod 'RxDataSources'   # UITableView
-  pod 'RxSwift'         # Reactive
-  pod 'RxCocoa'   	# Reactive
 
   target 'GitHubUsersTests' do
     inherit! :search_paths
