@@ -22,20 +22,26 @@ struct RepositoryItemView: View {
     }
     
     var body: some View {
-        VStack {
-            HStack {
-                Text(repositoryName)
-                Text(devLanguage)
-                Text(numberOfStars)
+        NavigationLink(destination: RepositoryDetailsView(url: URL(string: "https://www.swiftyplace.com"))) {
+            VStack {
+                HStack {
+                    Text(repositoryName)
+                    Text(devLanguage)
+                    Text(numberOfStars)
+                }
+                Text(description)
             }
-            
-            Text(description)
         }
     }
 }
 
 struct RepositoryItemView_Previews: PreviewProvider {
     static var previews: some View {
-        RepositoryItemView(repositoryName: "GitHubUsers", devLanguage: "Swift", numberOfStars: "23", description: "This is a project for seeing users")
+        RepositoryItemView(
+            repositoryName: "GitHubUsers",
+            devLanguage: "Swift",
+            numberOfStars: "23",
+            description: "This is a project for seeing users"
+        )
     }
 }
