@@ -19,7 +19,7 @@ struct UserItemView: View {
     }
     
     var body: some View {
-        NavigationLink(destination: UserDetailsView()) {
+        NavigationLink(destination: UserDetailsView(userName: userName)) {
             HStack(spacing: 10) {
                 avatarView()
                     .resizable()

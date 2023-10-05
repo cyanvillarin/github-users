@@ -8,14 +8,14 @@
 import Combine
 import Alamofire
 
+// TODO: Implement Pagination
+
 class UsersListViewModel: ObservableObject {
     
     @Published var users: [User] = []  // same as BehaviorRelay since there is initial value
     
     private var cancellable = Set<AnyCancellable>()  // same as DisposeBag
-    
-    let apiToken = "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"
-    
+        
     let urlString = "https://api.github.com/users"
     
     init() {
@@ -24,7 +24,11 @@ class UsersListViewModel: ObservableObject {
     
     private func fetchUsers() {
         
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(apiToken)"]
+        // TODO: Add instructions on the README (and explain that the accessToken is deleted on Github when the token is committed)
+        // Mention that I will send the accessToken through email, and set the step-by-step screenshots for setting on the Xcode's environment
+        guard let accessToken = ProcessInfo.processInfo.environment["ACCESS_TOKEN"] else { return }
+        
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
         AF.request(urlString, method: .get, headers: headers)
             .publishDecodable(type: [User].self)
             .receive(on: DispatchQueue.main)    // set the scheduler

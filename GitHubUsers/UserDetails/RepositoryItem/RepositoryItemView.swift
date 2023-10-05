@@ -9,25 +9,27 @@ import SwiftUI
 
 struct RepositoryItemView: View {
     
-    var repositoryName: String
+    var url: String
+    var name: String
     var devLanguage: String
-    var numberOfStars: String
+    var numberOfStars: Int
     var description: String
     
-    init(repositoryName: String, devLanguage: String, numberOfStars: String, description: String) {
-        self.repositoryName = repositoryName
+    init(url: String, name: String, devLanguage: String, numberOfStars: Int, description: String) {
+        self.url = url
+        self.name = name
         self.devLanguage = devLanguage
         self.numberOfStars = numberOfStars
         self.description = description
     }
     
     var body: some View {
-        NavigationLink(destination: RepositoryDetailsView(url: URL(string: "https://www.swiftyplace.com"))) {
+        NavigationLink(destination: RepositoryDetailsView(url: URL(string: url))) {
             VStack {
                 HStack {
-                    Text(repositoryName)
+                    Text(name)
                     Text(devLanguage)
-                    Text(numberOfStars)
+                    Text(String(numberOfStars))
                 }
                 Text(description)
             }
@@ -38,9 +40,10 @@ struct RepositoryItemView: View {
 struct RepositoryItemView_Previews: PreviewProvider {
     static var previews: some View {
         RepositoryItemView(
-            repositoryName: "GitHubUsers",
+            url: "https://google.com",
+            name: "GitHubUsers",
             devLanguage: "Swift",
-            numberOfStars: "23",
+            numberOfStars: 23,
             description: "This is a project for seeing users"
         )
     }
