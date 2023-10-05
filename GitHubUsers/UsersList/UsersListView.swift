@@ -9,15 +9,12 @@ import SwiftUI
 import Combine
 
 struct UsersListView: View {
+    
+    @StateObject var viewModel = UsersListViewModel()
+    
     var body: some View {
-        List {
-            UserItemView(userName: "Cyan Villarin", image: "test")
-            UserItemView(userName: "Miho Villarin", image: "test")
-            UserItemView(userName: "Some Test", image: "test")
-            UserItemView(userName: "Kousuke Fujita", image: "test")
-            UserItemView(userName: "Cray Villarin", image: "test")
-            UserItemView(userName: "Eisuke Fujita", image: "test")
-            UserItemView(userName: "Hello Man", image: "test")
+        List(viewModel.users) { user in
+            UserItemView(userName: user.userName, avatarUrlString: user.avatarUrl)
         }
         .navigationTitle("GitHub Users")
     }

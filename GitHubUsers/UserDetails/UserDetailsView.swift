@@ -7,71 +7,70 @@
 
 import SwiftUI
 import Combine
+import Kingfisher
 
 struct UserDetailsView: View {
+    
+    @StateObject var viewModel: UserDetailsViewModel
+    
+    var userName: String
+    
+    // Seems like this is the workaround since we get this error message when we initialize ViewModel from our init()
+    // Cannot assign to property: 'viewModel' is a get-only property
+    init(userName: String) {
+        self.userName = userName
+        _viewModel = StateObject(wrappedValue: UserDetailsViewModel(userName: userName))
+    }
+    
     var body: some View {
         VStack {
-            Image(systemName: "person")
+            avatarView(viewModel.userDetails?.avatarUrl ?? "")  // TODO: improve this part
                 .resizable()
-                .frame(width: 50, height: 50)
+                .startLoadingBeforeViewAppear()  // solution for messy List + KF issue if there is .frame modifier user
+                .frame(width: 80, height: 80)
+                .scaledToFit()
+                .clipShape(Circle())
+                .onAppear()
             
-            Text("cyanvillarin")
-            Text("Cyan Villarin")
-            Text("Followers: 232")
-            Text("Follows: 250")
+            Text("\(viewModel.userDetails?.fullName ?? "")")                // TODO: improve this part
+            Text("Followers: \(viewModel.userDetails?.followers ?? 0)")     // TODO: improve this part
+            Text("Following: \(viewModel.userDetails?.following ?? 0)")     // TODO: improve this part
             
-            List {
+            List(viewModel.repositories) { repository in
                 RepositoryItemView(
-                    repositoryName: "GitHubUsers",
-                    devLanguage: "Swift",
-                    numberOfStars: "23",
-                    description: "This is something"
-                )
-                RepositoryItemView(
-                    repositoryName: "ChatZone",
-                    devLanguage: "Swift",
-                    numberOfStars: "62",
-                    description: "This is a chat app"
-                )
-                RepositoryItemView(
-                    repositoryName: "Facebook",
-                    devLanguage: "Swift",
-                    numberOfStars: "151",
-                    description: "This is an app"
-                )
-                RepositoryItemView(
-                    repositoryName: "TestingApp",
-                    devLanguage: "Swift",
-                    numberOfStars: "2",
-                    description: "A test app"
-                )
-                RepositoryItemView(
-                    repositoryName: "Help",
-                    devLanguage: "Ruby",
-                    numberOfStars: "232",
-                    description: "This is a web app"
-                )
-                RepositoryItemView(
-                    repositoryName: "Help",
-                    devLanguage: "Ruby",
-                    numberOfStars: "232",
-                    description: "This is a web app"
-                )
-                RepositoryItemView(
-                    repositoryName: "Help",
-                    devLanguage: "Ruby",
-                    numberOfStars: "232",
-                    description: "This is a web app"
+                    url: repository.url,
+                    name: repository.name,
+                    devLanguage: repository.language ?? "",
+                    numberOfStars: repository.stars,
+                    description: repository.description ?? ""
                 )
             }
         }
-        .navigationTitle("cyanvillarin")
+        .navigationTitle(userName)
     }
+    
+    // TODO: make this a common function
+    func avatarView(_ urlString: String) -> KFImage {
+        
+        let url = URL(string: urlString)
+        
+        let defaultImage = Image("default_user_logo")
+            .resizable()
+            .frame(width: 50, height: 50)
+        
+        let image = KFImage(url)
+            .placeholder { defaultImage }
+            .retry(maxCount: 3, interval: .seconds(5))
+            .cacheOriginalImage()
+        
+        return image
+    }
+    
 }
 
 struct UserDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        UserDetailsView()
+        UserDetailsView(userName: "cyanvillarin")
     }
 }
 
