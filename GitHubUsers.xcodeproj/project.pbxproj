@@ -17,6 +17,7 @@
 		625333ED2ACD10DE004976D9 /* GitHubUsersUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625333EC2ACD10DE004976D9 /* GitHubUsersUITestsLaunchTests.swift */; };
 		6253542A2ACE4F6D00C760FD /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625354292ACE4F6D00C760FD /* WebView.swift */; };
 		6253542C2ACE525700C760FD /* RepositoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6253542B2ACE525700C760FD /* RepositoryDetailsView.swift */; };
+		625354302ACEAAD500C760FD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6253542F2ACEAAD500C760FD /* User.swift */; };
 		628BB0DB2ACD6184003ED177 /* UsersListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628BB0DA2ACD6184003ED177 /* UsersListViewModel.swift */; };
 		628BB0DD2ACD61D3003ED177 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628BB0DC2ACD61D3003ED177 /* MainView.swift */; };
 		628BB0DF2ACD622F003ED177 /* UserItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628BB0DE2ACD622F003ED177 /* UserItemView.swift */; };
@@ -58,6 +59,7 @@
 		625333EC2ACD10DE004976D9 /* GitHubUsersUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubUsersUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		625354292ACE4F6D00C760FD /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		6253542B2ACE525700C760FD /* RepositoryDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDetailsView.swift; sourceTree = "<group>"; };
+		6253542F2ACEAAD500C760FD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		628BB0DA2ACD6184003ED177 /* UsersListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersListViewModel.swift; sourceTree = "<group>"; };
 		628BB0DC2ACD61D3003ED177 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		628BB0DE2ACD622F003ED177 /* UserItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserItemView.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 			isa = PBXGroup;
 			children = (
 				6253542E2ACE55FC00C760FD /* UserItem */,
+				6253542F2ACEAAD500C760FD /* User.swift */,
 				625333D12ACD10DD004976D9 /* UsersListView.swift */,
 				628BB0DA2ACD6184003ED177 /* UsersListViewModel.swift */,
 			);
@@ -482,6 +485,7 @@
 				625333D02ACD10DD004976D9 /* GitHubUsersApp.swift in Sources */,
 				628BB0E42ACD7458003ED177 /* RepositoryItemView.swift in Sources */,
 				628BB0E22ACD653B003ED177 /* UserDetailsView.swift in Sources */,
+				625354302ACEAAD500C760FD /* User.swift in Sources */,
 				628BB0DF2ACD622F003ED177 /* UserItemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -652,7 +656,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -685,7 +689,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
