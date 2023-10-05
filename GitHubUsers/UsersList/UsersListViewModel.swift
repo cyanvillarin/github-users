@@ -8,6 +8,8 @@
 import Combine
 import Alamofire
 
+// TODO: Implement Pagination
+
 class UsersListViewModel: ObservableObject {
     
     @Published var users: [User] = []  // same as BehaviorRelay since there is initial value
