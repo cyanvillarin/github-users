@@ -14,7 +14,11 @@ struct UsersListView: View {
     
     var body: some View {
         List(viewModel.users) { user in
-            UserItemView(userName: user.userName, avatarUrlString: user.avatarUrl)
+            UserItemView(
+                avatarUrlString: user.avatarUrl,
+                userName: user.userName,
+                userType: user.type
+            )
         }
         .navigationTitle("GitHub Users")
     }
