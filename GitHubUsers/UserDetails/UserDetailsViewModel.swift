@@ -62,7 +62,10 @@ class UserDetailsViewModel: ObservableObject {
                 guard let self else { return }
                 switch response.result {
                 case .success(let response):
-                    self.repositories = response
+                    let repos = response
+                        .filter { !$0.isFork }
+                        .sorted(by: { $0.stars > $1.stars })
+                    self.repositories = repos
                 case .failure:
                     self.repositories = []
                 }

@@ -24,10 +24,10 @@ struct UserDetailsView: View {
     
     var body: some View {
         
-        VStack {
+        VStack(spacing: 5) {
             
             // upper
-            HStack(spacing: 20) {
+            HStack(spacing: 15) {
                 avatarView(viewModel.userDetails?.avatarUrl ?? "")  // TODO: improve this part
                     .resizable()
                     .startLoadingBeforeViewAppear()  // solution for messy List + KF issue if there is .frame modifier user
@@ -35,6 +35,8 @@ struct UserDetailsView: View {
                     .scaledToFit()
                     .clipShape(Circle())
                     .onAppear()
+                
+                Spacer().frame(width: 5)
                 
                 VStack {
                     Text("\(viewModel.repositories.count)").bold()
@@ -52,19 +54,46 @@ struct UserDetailsView: View {
                 }
             }
             
+            Spacer().frame(height: 5)
+            
             // lower
-            Text("\(viewModel.userDetails?.fullName ?? "")").bold()
-            Text("\(viewModel.userDetails?.bio ?? "")")
-            Text("\(viewModel.userDetails?.company ?? "")")
-        
+            if let fullName = viewModel.userDetails?.fullName {
+                HStack {
+                    Text(fullName).bold()
+                    Spacer()
+                }
+                .padding(.leading, 33)
+                .padding(.trailing, 20)
+            }
+            
+            if let bio = viewModel.userDetails?.bio {
+                HStack {
+                    Text(bio)
+                    Spacer()
+                }
+                .padding(.leading, 33)
+                .padding(.trailing, 20)
+            }
+            
+            if let company = viewModel.userDetails?.company {
+                HStack {
+                    Text(company)
+                    Spacer()
+                }
+                .padding(.leading, 33)
+                .padding(.trailing, 20)
+            }
+            
+            Spacer().frame(height: 5)
+            
             // repo list
             List(viewModel.repositories) { repository in
                 RepositoryItemView(
                     url: repository.url,
                     name: repository.name,
-                    devLanguage: repository.language ?? "",
                     numberOfStars: repository.stars,
-                    description: repository.description ?? ""
+                    devLanguage: repository.language,
+                    description: repository.description
                 )
             }
         }
