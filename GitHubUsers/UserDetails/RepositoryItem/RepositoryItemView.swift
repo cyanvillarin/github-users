@@ -28,10 +28,31 @@ struct RepositoryItemView: View {
             VStack {
                 HStack {
                     Text(name)
-                    Text(devLanguage)
+                        .bold()
+                    Spacer()
+                    Image(systemName: "star")
+                        .resizable()
+                        .frame(width: 10, height: 10)
                     Text(String(numberOfStars))
+                    
                 }
-                Text(description)
+                .padding([.leading, .trailing])
+                
+                HStack {
+                    Text(String(devLanguage))
+                        .font(.subheadline)
+                    Spacer()
+                }
+                .padding([.leading, .trailing])
+                
+                HStack {
+                    Text(description)
+                        .fontWeight(.light)
+                        .font(.caption)
+                    Spacer()
+                }
+                .padding([.leading, .trailing])
+                
             }
         }
     }

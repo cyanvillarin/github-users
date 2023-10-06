@@ -23,19 +23,41 @@ struct UserDetailsView: View {
     }
     
     var body: some View {
+        
         VStack {
-            avatarView(viewModel.userDetails?.avatarUrl ?? "")  // TODO: improve this part
-                .resizable()
-                .startLoadingBeforeViewAppear()  // solution for messy List + KF issue if there is .frame modifier user
-                .frame(width: 80, height: 80)
-                .scaledToFit()
-                .clipShape(Circle())
-                .onAppear()
             
-            Text("\(viewModel.userDetails?.fullName ?? "")")                // TODO: improve this part
-            Text("Followers: \(viewModel.userDetails?.followers ?? 0)")     // TODO: improve this part
-            Text("Following: \(viewModel.userDetails?.following ?? 0)")     // TODO: improve this part
+            // upper
+            HStack(spacing: 20) {
+                avatarView(viewModel.userDetails?.avatarUrl ?? "")  // TODO: improve this part
+                    .resizable()
+                    .startLoadingBeforeViewAppear()  // solution for messy List + KF issue if there is .frame modifier user
+                    .frame(width: 80, height: 80)
+                    .scaledToFit()
+                    .clipShape(Circle())
+                    .onAppear()
+                
+                VStack {
+                    Text("\(viewModel.repositories.count)").bold()
+                    Text("Repos")
+                }
+                
+                VStack {
+                    Text("\(viewModel.userDetails?.followers ?? 0)").bold()
+                    Text("Followers")
+                }
+                
+                VStack {
+                    Text("\(viewModel.userDetails?.following ?? 0)").bold()
+                    Text("Following")
+                }
+            }
             
+            // lower
+            Text("\(viewModel.userDetails?.fullName ?? "")").bold()
+            Text("\(viewModel.userDetails?.bio ?? "")")
+            Text("\(viewModel.userDetails?.company ?? "")")
+        
+            // repo list
             List(viewModel.repositories) { repository in
                 RepositoryItemView(
                     url: repository.url,
