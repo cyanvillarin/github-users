@@ -19,6 +19,8 @@ class UserDetailsViewModel: ObservableObject {
     
     var reposCount: Int = 0
     
+    var currentPage = 1
+    
     init(userName: String) {
         self.userName = userName
         fetchUserDetails()
@@ -48,13 +50,13 @@ class UserDetailsViewModel: ObservableObject {
             .store(in: &cancellable)    // same as disposedBy
     }
     
-    private func fetchRepositories() {
+    func fetchRepositories() {
         
         // TODO: Refactor this into like a global variable
         guard let accessToken = ProcessInfo.processInfo.environment["ACCESS_TOKEN"] else { return }
         let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
         
-        let urlString = "https://api.github.com/users/\(userName)/repos?per_page=5&page=\(1)"
+        let urlString = "https://api.github.com/users/\(userName)/repos?per_page=30&page=\(currentPage)"
         
         AF.request(urlString, method: .get, headers: headers)
             .publishDecodable(type: [Repository].self)
@@ -64,8 +66,16 @@ class UserDetailsViewModel: ObservableObject {
                 guard let self else { return }
                 switch response.result {
                 case .success(let response):
+                    
+                    self.currentPage = self.currentPage + 1
+                    
                     let repos = response
-                    self.repositories = repos
+                        .filter { !$0.isFork }
+                        .sorted(by: { $0.stars > $1.stars })
+                    
+                    var repositoriesCopy = self.repositories
+                    repositoriesCopy.append(contentsOf: repos)
+                    self.repositories = repositoriesCopy
                     
                 case .failure:
                     self.repositories = []
@@ -73,5 +83,5 @@ class UserDetailsViewModel: ObservableObject {
             }
             .store(in: &cancellable)    // same as disposedBy
     }
-    
+        
 }
