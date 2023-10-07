@@ -37,12 +37,7 @@ struct UserDetailsView: View {
                     .clipShape(Circle())
                     .onAppear()
                 
-                Spacer().frame(width: 5)
-                
-                VStack {
-                    Text("\(viewModel.reposCount)").bold()
-                    Text("Repos")
-                }
+                Spacer().frame(width: 1)
                 
                 VStack {
                     Text("\(viewModel.userDetails?.followers ?? 0)").bold()

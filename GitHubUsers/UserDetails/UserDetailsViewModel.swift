@@ -54,7 +54,7 @@ class UserDetailsViewModel: ObservableObject {
         guard let accessToken = ProcessInfo.processInfo.environment["ACCESS_TOKEN"] else { return }
         let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
         
-        let urlString = "https://api.github.com/users/\(userName)/repos"
+        let urlString = "https://api.github.com/users/\(userName)/repos?per_page=5&page=\(1)"
         
         AF.request(urlString, method: .get, headers: headers)
             .publishDecodable(type: [Repository].self)
@@ -66,9 +66,6 @@ class UserDetailsViewModel: ObservableObject {
                 case .success(let response):
                     let repos = response
                     self.repositories = repos
-                    if let publicReposCount = self.userDetails?.publicReposCount {
-                        self.reposCount = publicReposCount - self.repositories.filter { $0.isFork }.count   // only display the non-forked repos' count
-                    } 
                     
                 case .failure:
                     self.repositories = []
