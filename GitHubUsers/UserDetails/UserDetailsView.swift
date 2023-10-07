@@ -18,8 +18,9 @@ struct UserDetailsView: View {
     // Seems like this is the workaround since we get this error message when we initialize ViewModel from our init()
     // Cannot assign to property: 'viewModel' is a get-only property
     init(userName: String) {
-        self.userName = userName
-        _viewModel = StateObject(wrappedValue: UserDetailsViewModel(userName: userName))
+        print(userName)
+        self.userName = "cyanvillarin"
+        _viewModel = StateObject(wrappedValue: UserDetailsViewModel(userName: "cyanvillarin"))
     }
     
     var body: some View {
@@ -39,7 +40,7 @@ struct UserDetailsView: View {
                 Spacer().frame(width: 5)
                 
                 VStack {
-                    Text("\(viewModel.repositories.count)").bold()
+                    Text("\(viewModel.reposCount)").bold()
                     Text("Repos")
                 }
                 
@@ -87,7 +88,11 @@ struct UserDetailsView: View {
             Spacer().frame(height: 5)
             
             // repo list
-            List(viewModel.repositories) { repository in
+            List(
+                viewModel.repositories
+                    .filter { !$0.isFork }
+                    .sorted(by: { $0.stars > $1.stars })
+            ) { repository in
                 RepositoryItemView(
                     url: repository.url,
                     name: repository.name,

@@ -17,6 +17,7 @@ struct UserDetails: Decodable, Identifiable {
     let type: String
     let followers: Int
     let following: Int
+    let publicReposCount: Int
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -28,5 +29,6 @@ struct UserDetails: Decodable, Identifiable {
         case type
         case followers
         case following
+        case publicReposCount = "public_repos"
     }
 }

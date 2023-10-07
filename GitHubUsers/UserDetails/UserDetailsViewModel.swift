@@ -17,6 +17,8 @@ class UserDetailsViewModel: ObservableObject {
         
     var userName: String
     
+    var reposCount: Int = 0
+    
     init(userName: String) {
         self.userName = userName
         fetchUserDetails()
@@ -63,9 +65,11 @@ class UserDetailsViewModel: ObservableObject {
                 switch response.result {
                 case .success(let response):
                     let repos = response
-                        .filter { !$0.isFork }
-                        .sorted(by: { $0.stars > $1.stars })
                     self.repositories = repos
+                    if let publicReposCount = self.userDetails?.publicReposCount {
+                        self.reposCount = publicReposCount - self.repositories.filter { $0.isFork }.count   // only display the non-forked repos' count
+                    } 
+                    
                 case .failure:
                     self.repositories = []
                 }
