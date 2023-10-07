@@ -71,7 +71,6 @@ class UserDetailsViewModel: ObservableObject {
                     
                     let repos = response
                         .filter { !$0.isFork }
-                        .sorted(by: { $0.stars > $1.stars })
                     
                     var repositoriesCopy = self.repositories
                     repositoriesCopy.append(contentsOf: repos)
