@@ -36,12 +36,7 @@ struct UserDetailsView: View {
                     .clipShape(Circle())
                     .onAppear()
                 
-                Spacer().frame(width: 5)
-                
-                VStack {
-                    Text("\(viewModel.repositories.count)").bold()
-                    Text("Repos")
-                }
+                Spacer().frame(width: 1)
                 
                 VStack {
                     Text("\(viewModel.userDetails?.followers ?? 0)").bold()
@@ -95,7 +90,13 @@ struct UserDetailsView: View {
                     devLanguage: repository.language,
                     description: repository.description
                 )
+                .onAppear() {
+                    if viewModel.repositories.last?.id == repository.id {
+                        viewModel.fetchRepositories()
+                    }
+                }
             }
+            
         }
         .navigationTitle(userName)
     }
