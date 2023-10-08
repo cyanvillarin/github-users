@@ -2,7 +2,7 @@
 //  RepositoryItemView.swift
 //  GitHubUsers
 //
-//  Created by CyanCamit.Villari on 2023/10/04.
+//  Created by Cyan Villarin on 2023/10/04.
 //
 
 import SwiftUI
@@ -15,7 +15,13 @@ struct RepositoryItemView: View {
     var devLanguage: String?
     var description: String?
     
-    init(url: String, name: String, numberOfStars: Int, devLanguage: String?, description: String?) {
+    init(
+        url: String,
+        name: String,
+        numberOfStars: Int,
+        devLanguage: String?,
+        description: String?
+    ) {
         self.url = url
         self.name = name
         self.devLanguage = devLanguage
@@ -28,26 +34,21 @@ struct RepositoryItemView: View {
             VStack(spacing: 2) {
                 
                 HStack {
-                    Image(systemName: "star")
-                        .resizable()
-                        .frame(width: 10, height: 10)
-                    Text(String(numberOfStars))
-                        .font(.caption)
+                    Image(systemName: "star").resizable().frame(width: 10, height: 10)
+                    Text(String(numberOfStars)).font(.caption)
                     Spacer()
                 }
                 .padding([.leading, .trailing])
                 
                 HStack {
-                    Text(name)
-                        .bold()
+                    Text(name).bold()
                     Spacer()
                 }
                 .padding([.leading, .trailing])
                 
                 if let devLanguage {
                     HStack {
-                        Text(String(devLanguage))
-                            .font(.subheadline)
+                        Text(String(devLanguage)).font(.subheadline)
                         Spacer()
                     }
                     .padding([.leading, .trailing])
@@ -55,9 +56,7 @@ struct RepositoryItemView: View {
                 
                 if let description {
                     HStack {
-                        Text(description)
-                            .fontWeight(.light)
-                            .font(.caption)
+                        Text(description).fontWeight(.light).font(.caption)
                         Spacer()
                     }
                     .padding([.leading, .trailing])

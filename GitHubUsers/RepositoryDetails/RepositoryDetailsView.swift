@@ -2,7 +2,7 @@
 //  RepositoryDetailsView.swift
 //  GitHubUsers
 //
-//  Created by CyanCamit.Villari on 2023/10/05.
+//  Created by Cyan Villarin on 2023/10/05.
 //
 
 import SwiftUI
@@ -16,8 +16,7 @@ struct RepositoryDetailsView: View {
     var body: some View {
         ZStack {
             if let error = error {
-                Text(error.localizedDescription)
-                                    .foregroundColor(.pink)
+                Text(error.localizedDescription).foregroundColor(.pink)
             } else {
                 if let url = url {
                     GeometryReader { geometry in

@@ -2,7 +2,7 @@
 //  UserDetailsViewModel.swift
 //  GitHubUsers
 //
-//  Created by CYAN on 2023/10/05.
+//  Created by Cyan Villarin on 2023/10/05.
 //
 
 import Combine
@@ -10,18 +10,21 @@ import Alamofire
 
 class UserDetailsViewModel: ObservableObject {
     
+    // observed by the View to display info
     @Published var userDetails: UserDetails? = nil
     @Published var repositories: [Repository] = []
-    
-    var userName: String
-    
-    private var cancellable = Set<AnyCancellable>()
-    private var currentPage = 1
     
     // observed by the View to know if we need to show toast message
     @Published var shouldShowToastMessage = false
     @Published var toastMessage: String? = nil
     
+    // same as DisposeBag
+    private var cancellable = Set<AnyCancellable>()
+    
+    // updated when the user successfully display the repo
+    private var currentPage = 1
+    
+    var userName: String
     init(userName: String) {
         self.userName = userName
         Task {
