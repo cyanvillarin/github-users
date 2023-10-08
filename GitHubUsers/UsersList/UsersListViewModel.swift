@@ -12,11 +12,10 @@ import Alamofire
 
 class UsersListViewModel: ObservableObject {
     
-    // observed by the View to know which items to display (filtered when using the searchBar)
-    @Published var usersToDisplay: [User] = []
     
-    // this contains all the users to be displayed on View
-    private var users: [User] = []
+    @Published var usersToDisplay: [User] = []  // observed by the View to know which items to display (filtered when using the searchBar)
+    
+    var users: [User] = [] // this contains all the users to be displayed on View
     
     private var lastId: Int64 = 0 // this is the id to be used from 'since' - for pagination
     
@@ -24,8 +23,22 @@ class UsersListViewModel: ObservableObject {
         
     let urlString = "https://api.github.com/users"
     
+    @Published var searchText = ""
+    
     init() {
         fetchUsers()
+        bindData()
+    }
+    
+    private func bindData() {
+        $searchText
+            .debounce(for: .seconds(0.75), scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink(receiveValue: { [weak self] searchText in
+                guard let self else { return }
+                self.searchUser(withUserName: searchText)
+            })
+            .store(in: &cancellable)
     }
     
     private func fetchUsers() {
@@ -49,7 +62,7 @@ class UsersListViewModel: ObservableObject {
                         self.lastId = lastId
                     }
                 case .failure:
-                    self.users = []  // TODO: fix here
+                    self.users = []
                 }
             }
             .store(in: &cancellable)    // same as disposedBy
@@ -87,9 +100,9 @@ class UsersListViewModel: ObservableObject {
                         type: response.type
                     )
                     self.usersToDisplay = [user]
+                    UserDefaultsManager.addToSearchedUsers(item: searchText)
 
-                case .failure:
-                    self.users = []
+                case .failure: return
                 }
             }
             .store(in: &cancellable)    // same as disposedBy
@@ -119,9 +132,10 @@ class UsersListViewModel: ObservableObject {
                     var usersCopy = self.users
                     usersCopy.append(contentsOf: response)
                     self.users = usersCopy
+                    self.usersToDisplay = usersCopy
                     print("last user id: \(self.lastId)")
                 case .failure:
-                    print("Something bad happened")
+                    return
                 }
             }
             .store(in: &cancellable)    // same as disposedBy

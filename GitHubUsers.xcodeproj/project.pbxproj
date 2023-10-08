@@ -26,6 +26,7 @@
 		877A98922ACEE6E00055AA13 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877A98912ACEE6E00055AA13 /* UserDetails.swift */; };
 		877A98942ACEEA7D0055AA13 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877A98932ACEEA7D0055AA13 /* Repository.swift */; };
 		87E4809F2AD21FD300D075A7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E4809E2AD21FD300D075A7 /* User.swift */; };
+		87E480A22AD22EFE00D075A7 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E480A12AD22EFE00D075A7 /* UserDefaultsManager.swift */; };
 		A7CD513F7626B051085A8A5E /* Pods_GitHubUsersTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F770F04F75076F152CEB9AFA /* Pods_GitHubUsersTests.framework */; };
 		B6EAAC04FF0BA1657359E48A /* Pods_GitHubUsers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 806123172CFB2A24DADE36B8 /* Pods_GitHubUsers.framework */; };
 /* End PBXBuildFile section */
@@ -74,6 +75,7 @@
 		877A98912ACEE6E00055AA13 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		877A98932ACEEA7D0055AA13 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		87E4809E2AD21FD300D075A7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		87E480A12AD22EFE00D075A7 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		8B00E6DC7E9A2FD4A3416AED /* Pods-GitHubUsersTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitHubUsersTests.release.xcconfig"; path = "Target Support Files/Pods-GitHubUsersTests/Pods-GitHubUsersTests.release.xcconfig"; sourceTree = "<group>"; };
 		C25C5DDA3F3228B077827149 /* Pods-GitHubUsers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitHubUsers.release.xcconfig"; path = "Target Support Files/Pods-GitHubUsers/Pods-GitHubUsers.release.xcconfig"; sourceTree = "<group>"; };
 		EC503F4A90233A9BD3B373BA /* Pods_GitHubUsers_GitHubUsersUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GitHubUsers_GitHubUsersUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,7 +160,8 @@
 			children = (
 				625333CF2ACD10DD004976D9 /* GitHubUsersApp.swift */,
 				628BB0DC2ACD61D3003ED177 /* MainView.swift */,
-				625354282ACE4F6400C760FD /* Common */,
+				87E480A02AD22EEA00D075A7 /* Managers */,
+				625354282ACE4F6400C760FD /* CommonViews */,
 				877A98952ACEEAB70055AA13 /* Models */,
 				628BB0D92ACD6174003ED177 /* UsersList */,
 				628BB0E02ACD652B003ED177 /* UserDetails */,
@@ -202,12 +205,12 @@
 			path = RepositoryDetails;
 			sourceTree = "<group>";
 		};
-		625354282ACE4F6400C760FD /* Common */ = {
+		625354282ACE4F6400C760FD /* CommonViews */ = {
 			isa = PBXGroup;
 			children = (
 				625354292ACE4F6D00C760FD /* WebView.swift */,
 			);
-			path = Common;
+			path = CommonViews;
 			sourceTree = "<group>";
 		};
 		6253542D2ACE55F000C760FD /* RepositoryItem */ = {
@@ -254,6 +257,14 @@
 				877A98932ACEEA7D0055AA13 /* Repository.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		87E480A02AD22EEA00D075A7 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				87E480A12AD22EFE00D075A7 /* UserDefaultsManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -504,6 +515,7 @@
 				625333D02ACD10DD004976D9 /* GitHubUsersApp.swift in Sources */,
 				628BB0E42ACD7458003ED177 /* RepositoryItemView.swift in Sources */,
 				628BB0E22ACD653B003ED177 /* UserDetailsView.swift in Sources */,
+				87E480A22AD22EFE00D075A7 /* UserDefaultsManager.swift in Sources */,
 				877A98902ACEE6770055AA13 /* UserDetailsViewModel.swift in Sources */,
 				628BB0DF2ACD622F003ED177 /* UserItemView.swift in Sources */,
 				87E4809F2AD21FD300D075A7 /* User.swift in Sources */,
