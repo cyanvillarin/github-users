@@ -8,17 +8,32 @@
 import Foundation
 
 class UserDefaultsManager {
+
+    // singleton because this will be used all through-out the project
+    static let shared = UserDefaultsManager()
     
-    static func getSearchedUsers() -> [String] {
-        let userDefaults = UserDefaults.standard
-        let searchedUsers = userDefaults.array(forKey: "searchedUsers") as? [String]
+    // keys
+    static let searchedUsersKey = "searchedUsers"
+    
+    // just return empty List if it is not yet saved
+    private func getSearchedUsers() -> [String] {
+        let searchedUsers = UserDefaults.standard.array(forKey: UserDefaultsManager.searchedUsersKey) as? [String]
         return searchedUsers ?? []
     }
     
-    static func addToSearchedUsers(item: String) {
-        let userDefaults = UserDefaults.standard
-        var searchedUsers = userDefaults.array(forKey: "searchedUsers") as? [String] ?? []
+    // reverse it so that the most recent is at the top
+    func getSearchUserHistory() -> [String] {
+        return getSearchedUsers().reversed()
+    }
+    
+    // first, get the searchedUsers, then removed it if it's already saved
+    // then append, so that it would appear at the top of the list (most recent at the top)
+    func addToSearchUserHistory(_ item: String) {
+        var searchedUsers = getSearchedUsers()
+        if searchedUsers.contains(item) {
+            searchedUsers.removeAll(where: { $0 == item })
+        }
         searchedUsers.append(item)
-        userDefaults.set(searchedUsers, forKey: "searchedUsers")
+        UserDefaults.standard.set(searchedUsers, forKey: UserDefaultsManager.searchedUsersKey)
     }
 }

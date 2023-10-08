@@ -92,13 +92,21 @@ struct UserDetailsView: View {
                 )
                 .onAppear() {
                     if viewModel.repositories.last?.id == repository.id {
-                        viewModel.fetchRepositories()
+                        Task { await viewModel.fetchRepositories() }
                     }
                 }
             }
             
         }
         .navigationTitle(userName)
+        .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: 5) {
+            AlertToast(
+                displayMode: .banner(.slide),
+                type: .error(.red),
+                title: "An error has occured!",
+                subTitle: viewModel.toastMessage
+            )
+        }
     }
     
     // TODO: make this a common function

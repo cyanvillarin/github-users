@@ -13,74 +13,49 @@ class UserDetailsViewModel: ObservableObject {
     @Published var userDetails: UserDetails? = nil
     @Published var repositories: [Repository] = []
     
-    private var cancellable = Set<AnyCancellable>()
-        
     var userName: String
     
-    var reposCount: Int = 0
+    private var cancellable = Set<AnyCancellable>()
+    private var currentPage = 1
     
-    var currentPage = 1
+    // observed by the View to know if we need to show toast message
+    @Published var shouldShowToastMessage = false
+    @Published var toastMessage: String? = nil
     
     init(userName: String) {
         self.userName = userName
-        fetchUserDetails()
-        fetchRepositories()
+        Task {
+            await fetchUserDetails()
+            await fetchRepositories()
+        }
     }
     
-    private func fetchUserDetails() {
-        
-        // TODO: Refactor this into like a global variable
-        guard let accessToken = ProcessInfo.processInfo.environment["ACCESS_TOKEN"] else { return }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
-        
-        let urlString = "https://api.github.com/users/\(userName)"
-        
-        AF.request(urlString, method: .get, headers: headers)
-            .publishDecodable(type: UserDetails.self)
-            .receive(on: DispatchQueue.main)    // set the scheduler
-            .sink { [weak self] response in     // same as onNext
-                guard let self else { return }
-                switch response.result {
-                case .success(let response):
-                    self.userDetails = response
-                case .failure:
-                    self.userDetails = nil
-                }
-            }
-            .store(in: &cancellable)    // same as disposedBy
+    @MainActor private func fetchUserDetails() async {
+        let endpoint = EndPoint.getUserDetails(userName: userName)
+        let result: Result<UserDetails, AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
+        switch result {
+        case .success(let userDetails):
+            self.userDetails = userDetails
+        case .failure(let error):
+            self.toastMessage = error.localizedDescription
+            self.shouldShowToastMessage = true
+        }
     }
     
-    func fetchRepositories() {
-        
-        // TODO: Refactor this into like a global variable
-        guard let accessToken = ProcessInfo.processInfo.environment["ACCESS_TOKEN"] else { return }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
-        
-        let urlString = "https://api.github.com/users/\(userName)/repos?per_page=30&page=\(currentPage)"
-        
-        AF.request(urlString, method: .get, headers: headers)
-            .publishDecodable(type: [Repository].self)
-            .receive(on: DispatchQueue.main)    // set the scheduler
-            .print("users api response")        // same as debug
-            .sink { [weak self] response in     // same as onNext
-                guard let self else { return }
-                switch response.result {
-                case .success(let response):
-                    
-                    self.currentPage = self.currentPage + 1
-                    
-                    let repos = response
-                        .filter { !$0.isFork }
-                    
-                    var repositoriesCopy = self.repositories
-                    repositoriesCopy.append(contentsOf: repos)
-                    self.repositories = repositoriesCopy
-                    
-                case .failure:
-                    self.repositories = []
-                }
-            }
-            .store(in: &cancellable)    // same as disposedBy
+    @MainActor func fetchRepositories() async {
+        let endpoint = EndPoint.getRepositories(userName: userName, currentPage: currentPage)
+        let result: Result<[Repository], AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
+        switch result {
+        case .success(let repositories):
+            self.currentPage = self.currentPage + 1
+            let filteredRepos = repositories.filter { !$0.isFork }
+            var repositoriesCopy = self.repositories
+            repositoriesCopy.append(contentsOf: filteredRepos)
+            self.repositories = repositoriesCopy
+        case .failure(let error):
+            self.toastMessage = error.localizedDescription
+            self.shouldShowToastMessage = true
+        }
     }
         
 }

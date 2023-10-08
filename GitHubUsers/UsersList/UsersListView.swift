@@ -13,8 +13,6 @@ struct UsersListView: View {
     @StateObject var viewModel = UsersListViewModel()
     @State private var searchText = ""
     
-    @State private var viewDidLoad = false
-    
     var body: some View {
         List(viewModel.usersToDisplay) { user in
             UserItemView(
@@ -23,19 +21,27 @@ struct UsersListView: View {
                 userType: user.type
             )
             .onAppear() {
-                if viewModel.users.last?.id == user.id {
-                    viewModel.fetchAdditionalUsers()
+                if viewModel.allUsers.last?.id == user.id {
+                    Task { await viewModel.fetchAdditionalUsers() }
                 }
             }
         }
         .navigationTitle("GitHub Users")
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always)) {
-            ForEach(UserDefaultsManager.getSearchedUsers(), id: \.self) { suggestion in
+            ForEach(UserDefaultsManager.shared.getSearchUserHistory(), id: \.self) { suggestion in
                 Text(suggestion).searchCompletion(suggestion)
             }
         }
         .onChange(of: searchText) { searchText in
             viewModel.searchText = searchText
+        }
+        .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: 5) {
+            AlertToast(
+                displayMode: .banner(.slide),
+                type: .error(.red),
+                title: "An error has occured!",
+                subTitle: viewModel.toastMessage
+            )
         }
     }
 }
