@@ -43,9 +43,9 @@ enum EndPoint {
     var queryParams: String? {
         switch self {
         case .getUsers(let lastUserId):
-            return "since=\(lastUserId)"
+            return "per_page=\(NetworkManager.usersPageLimit)&since=\(lastUserId)"
         case .getUserDetails:
-            return "per_page=\(NetworkManager.usersPageLimit)"
+            return nil
         case .getRepositories(_ , let currentPage):
             return "per_page=\(NetworkManager.reposPageLimit)&page=\(currentPage)"
         }

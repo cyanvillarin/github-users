@@ -14,7 +14,7 @@ class NetworkManager {
     static let shared = NetworkManager()
     
     // constants
-    static let baseUrl = "https://api.github.com/"
+    static let baseUrl = "https://api.github.com"
     static let usersPageLimit = 30
     static let reposPageLimit = 30
     
@@ -24,11 +24,11 @@ class NetworkManager {
         guard let accessToken else { return .failure(.explicitlyCancelled) }
         
         let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
-        let response = await AF.request(endpoint.urlString, method: endpoint.httpMethod, headers: headers)
+        let result = await AF.request(endpoint.urlString, method: endpoint.httpMethod, headers: headers)
             .serializingDecodable(Element.self)
-            .response
+            .result
         
-        switch response.result {
+        switch result {
             case .success(let data):    return .success(data)
             case .failure(let error):   return .failure(error)
         }

@@ -15,19 +15,17 @@ class UsersListViewModel: ObservableObject {
     
     @Published var usersToDisplay: [User] = []  // observed by the View to know which items to display (filtered when using the searchBar)
     
-    private var allUsers: [User] = [] // this contains all the users to be displayed on View
+    var allUsers: [User] = [] // this contains all the users to be displayed on View
     
     private var lastUserId: Int64 = 0 // this is the id to be used from 'since' - for pagination
     
     private var cancellable = Set<AnyCancellable>()  // same as DisposeBag
-        
-    let urlString = "https://api.github.com/users"
     
     @Published var searchText = ""
     
-    init() async {
+    init() {
         bindData()
-        await fetchUsers()
+        Task { await fetchUsers() }
     }
     
     private func bindData() {
@@ -41,29 +39,30 @@ class UsersListViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
-    private func fetchUsers() async {
+    @MainActor private func fetchUsers() async {
         let result: Result<[User], AFError> = await NetworkManager.shared.sendRequest(endpoint: .getUsers(lastUserId: 0))
+        print(result)
         switch result {
         case .success(let users):
             self.allUsers = users
             self.usersToDisplay = users
             if let lastId = users.last?.id {
-                self.lastId = lastId
+                self.lastUserId = lastId
             }
         case .failure(let error):
             print("Something went wrong: \(error.localizedDescription)")
         }
     }
     
-    private func searchUser(withUserName searchText: String) async {
-        
-        // add the searched text into the UserDefaults
-        UserDefaultsManager.shared.addToSearchUserHistory(searchText)
-        
+    @MainActor private func searchUser(withUserName searchText: String) async {
         // if 'searchText' is an empty string, display 'allUsers'
         if searchText == "" {
             usersToDisplay = allUsers
+            return
         }
+        
+        // add the searched text into the UserDefaults
+        UserDefaultsManager.shared.addToSearchUserHistory(searchText)
         
         // check first if the 'searchText' user is already on the 'allUsers' list
         if let resultUser = allUsers.first(where: { $0.userName == searchText }) {
@@ -74,6 +73,7 @@ class UsersListViewModel: ObservableObject {
         // if the user is not on the list, search for it
         let endpoint = EndPoint.getUserDetails(userName: searchText)
         let result: Result<UserDetails, AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
+        print(result)
         switch result {
         case .success(let userDetails):
             // in order to display, need to convert this into User
@@ -90,13 +90,13 @@ class UsersListViewModel: ObservableObject {
         }
     }
     
-    private func fetchAdditionalUsers() {
-        
-        let result: Result<[User], AFError> = await NetworkManager.shared.sendRequest(endpoint: .getUsers(lastUserId: <#T##Int64#>))
+    @MainActor func fetchAdditionalUsers() async {
+        let endpoint = EndPoint.getUsers(lastUserId: self.lastUserId)
+        let result: Result<[User], AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
         switch result {
         case .success(let users):
             if let lastId = users.last?.id {
-                self.lastId = lastId
+                self.lastUserId = lastId
             }
             var usersCopy = self.allUsers
             usersCopy.append(contentsOf: users)
@@ -106,36 +106,5 @@ class UsersListViewModel: ObservableObject {
         case .failure(let error):
             print("Something went wrong: \(error.localizedDescription)")
         }
-        
-        
-        guard let accessToken = ProcessInfo.processInfo.environment["ACCESS_TOKEN"] else { return }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
-        
-        let urlWithSince = "\(urlString)?since=\(self.lastId)"
-        
-        AF.request(urlWithSince, method: .get, headers: headers)
-            .publishDecodable(type: [User].self)
-            .receive(on: DispatchQueue.main)    // set the scheduler
-            .print("users api response")        // same as debug
-            .sink { [weak self] response in     // same as onNext
-                guard let self else { return }
-                switch response.result {
-                case .success(let response):
-                    
-                    if let lastId = response.last?.id {
-                        self.lastId = lastId
-                    }
-                    
-                    var usersCopy = self.allUsers
-                    usersCopy.append(contentsOf: response)
-                    self.allUsers = usersCopy
-                    self.usersToDisplay = usersCopy
-                    print("last user id: \(self.lastId)")
-                case .failure:
-                    return
-                }
-            }
-            .store(in: &cancellable)    // same as disposedBy
     }
-    
 }

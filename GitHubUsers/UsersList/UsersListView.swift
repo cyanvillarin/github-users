@@ -21,14 +21,14 @@ struct UsersListView: View {
                 userType: user.type
             )
             .onAppear() {
-                if viewModel.users.last?.id == user.id {
-                    viewModel.fetchAdditionalUsers()
+                if viewModel.allUsers.last?.id == user.id {
+                    Task { await viewModel.fetchAdditionalUsers() }
                 }
             }
         }
         .navigationTitle("GitHub Users")
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always)) {
-            ForEach(UserDefaultsManager.shared.getSearchUserHistory().reversed(), id: \.self) { suggestion in
+            ForEach(UserDefaultsManager.shared.getSearchUserHistory(), id: \.self) { suggestion in
                 Text(suggestion).searchCompletion(suggestion)
             }
         }
