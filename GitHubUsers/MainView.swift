@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-// TODO: Change the minimum from iOS 15 for the AsyncImage function
+// TODO: add the reason for iOS 15 for the 'searchable' function
 
 struct MainView: View {
     var body: some View {

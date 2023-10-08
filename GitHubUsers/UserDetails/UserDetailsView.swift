@@ -23,28 +23,80 @@ struct UserDetailsView: View {
     }
     
     var body: some View {
-        VStack {
-            avatarView(viewModel.userDetails?.avatarUrl ?? "")  // TODO: improve this part
-                .resizable()
-                .startLoadingBeforeViewAppear()  // solution for messy List + KF issue if there is .frame modifier user
-                .frame(width: 80, height: 80)
-                .scaledToFit()
-                .clipShape(Circle())
-                .onAppear()
+        
+        VStack(spacing: 5) {
             
-            Text("\(viewModel.userDetails?.fullName ?? "")")                // TODO: improve this part
-            Text("Followers: \(viewModel.userDetails?.followers ?? 0)")     // TODO: improve this part
-            Text("Following: \(viewModel.userDetails?.following ?? 0)")     // TODO: improve this part
+            // upper
+            HStack(spacing: 15) {
+                avatarView(viewModel.userDetails?.avatarUrl ?? "")  // TODO: improve this part
+                    .resizable()
+                    .startLoadingBeforeViewAppear()  // solution for messy List + KF issue if there is .frame modifier user
+                    .frame(width: 80, height: 80)
+                    .scaledToFit()
+                    .clipShape(Circle())
+                    .onAppear()
+                
+                Spacer().frame(width: 1)
+                
+                VStack {
+                    Text("\(viewModel.userDetails?.followers ?? 0)").bold()
+                    Text("Followers")
+                }
+                
+                VStack {
+                    Text("\(viewModel.userDetails?.following ?? 0)").bold()
+                    Text("Following")
+                }
+            }
             
+            Spacer().frame(height: 5)
+            
+            // lower
+            if let fullName = viewModel.userDetails?.fullName {
+                HStack {
+                    Text(fullName).bold()
+                    Spacer()
+                }
+                .padding(.leading, 33)
+                .padding(.trailing, 20)
+            }
+            
+            if let bio = viewModel.userDetails?.bio {
+                HStack {
+                    Text(bio)
+                    Spacer()
+                }
+                .padding(.leading, 33)
+                .padding(.trailing, 20)
+            }
+            
+            if let company = viewModel.userDetails?.company {
+                HStack {
+                    Text(company)
+                    Spacer()
+                }
+                .padding(.leading, 33)
+                .padding(.trailing, 20)
+            }
+            
+            Spacer().frame(height: 5)
+            
+            // repo list
             List(viewModel.repositories) { repository in
                 RepositoryItemView(
                     url: repository.url,
                     name: repository.name,
-                    devLanguage: repository.language ?? "",
                     numberOfStars: repository.stars,
-                    description: repository.description ?? ""
+                    devLanguage: repository.language,
+                    description: repository.description
                 )
+                .onAppear() {
+                    if viewModel.repositories.last?.id == repository.id {
+                        viewModel.fetchRepositories()
+                    }
+                }
             }
+            
         }
         .navigationTitle(userName)
     }
@@ -54,7 +106,7 @@ struct UserDetailsView: View {
         
         let url = URL(string: urlString)
         
-        let defaultImage = Image("default_user_logo")
+        let defaultImage = Image("DefaultUserLogo")
             .resizable()
             .frame(width: 50, height: 50)
         
