@@ -8,17 +8,24 @@
 import Foundation
 
 class UserDefaultsManager {
+
+    // singleton because this will be used all through-out the project
+    static let shared = UserDefaultsManager()
     
-    static func getSearchedUsers() -> [String] {
-        let userDefaults = UserDefaults.standard
-        let searchedUsers = userDefaults.array(forKey: "searchedUsers") as? [String]
+    static let searchedUsersKey = "searchedUsers"
+    
+    private func getSearchedUsers() -> [String] {
+        let searchedUsers = UserDefaults.standard.array(forKey: UserDefaultsManager.searchedUsersKey) as? [String]
         return searchedUsers ?? []
     }
     
-    static func addToSearchedUsers(item: String) {
-        let userDefaults = UserDefaults.standard
-        var searchedUsers = userDefaults.array(forKey: "searchedUsers") as? [String] ?? []
+    func getSearchUserHistory() -> [String] {
+        return getSearchedUsers()
+    }
+    
+    func addToSearchUserHistory(_ item: String) {
+        var searchedUsers = getSearchedUsers()
         searchedUsers.append(item)
-        userDefaults.set(searchedUsers, forKey: "searchedUsers")
+        UserDefaults.standard.set(searchedUsers, forKey: UserDefaultsManager.searchedUsersKey)
     }
 }

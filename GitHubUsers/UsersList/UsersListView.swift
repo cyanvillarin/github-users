@@ -13,8 +13,6 @@ struct UsersListView: View {
     @StateObject var viewModel = UsersListViewModel()
     @State private var searchText = ""
     
-    @State private var viewDidLoad = false
-    
     var body: some View {
         List(viewModel.usersToDisplay) { user in
             UserItemView(
@@ -30,7 +28,7 @@ struct UsersListView: View {
         }
         .navigationTitle("GitHub Users")
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always)) {
-            ForEach(UserDefaultsManager.getSearchedUsers(), id: \.self) { suggestion in
+            ForEach(UserDefaultsManager.shared.getSearchUserHistory().reversed(), id: \.self) { suggestion in
                 Text(suggestion).searchCompletion(suggestion)
             }
         }
