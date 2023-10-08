@@ -8,6 +8,8 @@
 import SwiftUI
 import Combine
 
+// TODO: add the reason for iOS 15 for the 'searchable' function
+
 struct MainView: View {
     var body: some View {
         NavigationView {

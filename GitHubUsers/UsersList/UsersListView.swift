@@ -11,9 +11,10 @@ import Combine
 struct UsersListView: View {
     
     @StateObject var viewModel = UsersListViewModel()
+    @State private var searchText = ""
     
     var body: some View {
-        List(viewModel.users) { user in
+        List(viewModel.usersToDisplay) { user in
             UserItemView(
                 avatarUrlString: user.avatarUrl,
                 userName: user.userName,
@@ -21,6 +22,14 @@ struct UsersListView: View {
             )
         }
         .navigationTitle("GitHub Users")
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always)) {
+            Text("cyanvillarin").searchCompletion("cyanvillarin")
+            Text("moneyfoward").searchCompletion("moneyfoward")
+            Text("nice one").searchCompletion("nice one")
+        }
+        .onChange(of: searchText) { searchText in
+            viewModel.searchUser(withUserName: searchText)
+        }
     }
 }
 
