@@ -2,7 +2,7 @@
 //  UserItemView.swift
 //  GitHubUsers
 //
-//  Created by CyanCamit.Villari on 2023/10/04.
+//  Created by Cyan Villarin on 2023/10/04.
 //
 
 import SwiftUI
@@ -10,9 +10,9 @@ import Kingfisher
 
 struct UserItemView: View {
     
-    var userName: String
-    var userType: String
-    var avatarUrlString: String
+    private var userName: String
+    private var userType: String
+    private var avatarUrlString: String
     
     init(avatarUrlString: String, userName: String, userType: String) {
         self.avatarUrlString = avatarUrlString
@@ -22,12 +22,13 @@ struct UserItemView: View {
     
     // Reference for the .startLoadingBeforeViewAppear() solution
     // https://github.com/onevcat/Kingfisher/issues/1988#issuecomment-1368591127
+    // solution for buggy List + KF issue if there is .frame() modifier
     var body: some View {
         NavigationLink(destination: UserDetailsView(userName: userName)) {
             HStack(spacing: 10) {
                 avatarView()
                     .resizable()
-                    .startLoadingBeforeViewAppear()  // solution for messy List + KF issue if there is .frame modifier user
+                    .startLoadingBeforeViewAppear()
                     .frame(width: 60, height: 60)
                     .scaledToFit()
                     .clipShape(Circle())

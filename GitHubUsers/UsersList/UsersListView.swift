@@ -2,7 +2,7 @@
 //  UsersListView.swift
 //  GitHubUsers
 //
-//  Created by CyanCamit.Villari on 2023/10/04.
+//  Created by Cyan Villarin on 2023/10/04.
 //
 
 import SwiftUI

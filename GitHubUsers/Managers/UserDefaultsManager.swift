@@ -2,7 +2,7 @@
 //  UserDefaultsManager.swift
 //  GitHubUsers
 //
-//  Created by CYAN on 2023/10/08.
+//  Created by Cyan Villarin on 2023/10/08.
 //
 
 import Foundation

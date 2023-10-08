@@ -2,7 +2,7 @@
 //  WebView.swift
 //  GitHubUsers
 //
-//  Created by CyanCamit.Villari on 2023/10/05.
+//  Created by Cyan Villarin on 2023/10/05.
 //
 
 import SwiftUI
@@ -15,6 +15,7 @@ struct WebView: UIViewRepresentable {
     @Binding var isLoading: Bool
     @Binding var error: Error?
     
+    // For UIViewRepresentable
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }

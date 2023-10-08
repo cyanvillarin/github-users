@@ -2,16 +2,31 @@
 //  EndPoint.swift
 //  GitHubUsers
 //
-//  Created by CYAN on 2023/10/08.
+//  Created by Cyan Villarin on 2023/10/08.
 //
 
 import Alamofire
 
 enum EndPoint {
-    case getUsers(lastUserId: Int64)    // lastUserId refers to the id where the list will start
+    
+    // lastUserId refers to the id where the list will start
+    case getUsers(lastUserId: Int64)
     case getUserDetails(userName: String)
     case getRepositories(userName: String, currentPage: Int)
     
+    // the query parameters for each endpoint
+    var queryParams: String? {
+        switch self {
+        case .getUsers(let lastUserId):
+            return "per_page=\(NetworkManager.usersPageLimit)&since=\(lastUserId)"
+        case .getUserDetails:
+            return nil
+        case .getRepositories(_ , let currentPage):
+            return "per_page=\(NetworkManager.reposPageLimit)&page=\(currentPage)"
+        }
+    }
+    
+    // the urlString to be used, add queryParams if needed
     var urlString: String {
         let baseUrl = NetworkManager.baseUrl
         var path: String {
@@ -31,23 +46,12 @@ enum EndPoint {
         return completeUrlString
     }
     
-    // it is repeating, but I kinda like how this looks :)
+    // it is repeating, but I think this is easier to maintain :)
     var httpMethod: HTTPMethod {
         switch self {
         case .getUsers:         return .get
         case .getUserDetails:   return .get
         case .getRepositories:  return .get
-        }
-    }
-    
-    var queryParams: String? {
-        switch self {
-        case .getUsers(let lastUserId):
-            return "per_page=\(NetworkManager.usersPageLimit)&since=\(lastUserId)"
-        case .getUserDetails:
-            return nil
-        case .getRepositories(_ , let currentPage):
-            return "per_page=\(NetworkManager.reposPageLimit)&page=\(currentPage)"
         }
     }
 }

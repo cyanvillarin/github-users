@@ -2,7 +2,7 @@
 //  UsersListViewModel.swift
 //  GitHubUsers
 //
-//  Created by CyanCamit.Villari on 2023/10/04.
+//  Created by Cyan Villarin on 2023/10/04.
 //
 
 import Combine
@@ -80,8 +80,8 @@ class UsersListViewModel: ObservableObject {
         // if the user is not on the list, search for it
         let endpoint = EndPoint.getUserDetails(userName: searchText)
         let result: Result<UserDetails, AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
-        print(result)
-        switch result {
+        
+        switch result {    
         case .success(let userDetails):
             // in order to display, need to convert this into User
             let user = User(
@@ -93,6 +93,7 @@ class UsersListViewModel: ObservableObject {
             self.usersToDisplay = [user]
             
         case .failure(let error):
+            // in case something fails, set a value to the publisher for showing toast
             self.toastMessage = error.localizedDescription
             self.shouldShowToastMessage = true
         }
