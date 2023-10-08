@@ -8,20 +8,26 @@
 import Combine
 import Alamofire
 
-// TODO: Implement Pagination
-
 class UsersListViewModel: ObservableObject {
     
-    
-    @Published var usersToDisplay: [User] = []  // observed by the View to know which items to display (filtered when using the searchBar)
-    
-    var allUsers: [User] = [] // this contains all the users to be displayed on View
-    
-    private var lastUserId: Int64 = 0 // this is the id to be used from 'since' - for pagination
-    
-    private var cancellable = Set<AnyCancellable>()  // same as DisposeBag
-    
+    // set from the view when user types in the search bar
     @Published var searchText = ""
+    
+    // observed by the View to know which items to display (filtered when using the searchBar)
+    @Published var usersToDisplay: [User] = []
+    
+    // observed by the View to know if we need to show toast message
+    @Published var shouldShowToastMessage = false
+    @Published var toastMessage: String? = nil
+    
+    // this contains all the users to be displayed on View
+    var allUsers: [User] = []
+    
+    // this is the id to be used from 'since' - for pagination
+    private var lastUserId: Int64 = 0
+    
+    // same as DisposeBag
+    private var cancellable = Set<AnyCancellable>()
     
     init() {
         bindData()
@@ -50,7 +56,8 @@ class UsersListViewModel: ObservableObject {
                 self.lastUserId = lastId
             }
         case .failure(let error):
-            print("Something went wrong: \(error.localizedDescription)")
+            self.toastMessage = error.localizedDescription
+            self.shouldShowToastMessage = true
         }
     }
     
@@ -86,7 +93,8 @@ class UsersListViewModel: ObservableObject {
             self.usersToDisplay = [user]
             
         case .failure(let error):
-            print("Something went wrong: \(error.localizedDescription)")
+            self.toastMessage = error.localizedDescription
+            self.shouldShowToastMessage = true
         }
     }
     
@@ -104,7 +112,8 @@ class UsersListViewModel: ObservableObject {
             self.usersToDisplay = usersCopy
             
         case .failure(let error):
-            print("Something went wrong: \(error.localizedDescription)")
+            self.toastMessage = error.localizedDescription
+            self.shouldShowToastMessage = true
         }
     }
 }

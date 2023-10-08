@@ -24,6 +24,9 @@
 		628BB0E42ACD7458003ED177 /* RepositoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628BB0E32ACD7458003ED177 /* RepositoryItemView.swift */; };
 		8734FD9A2AD291E7005B65F4 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8734FD992AD291E7005B65F4 /* NetworkManager.swift */; };
 		8734FD9D2AD29E3E005B65F4 /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8734FD9C2AD29E3E005B65F4 /* EndPoint.swift */; };
+		8734FDA42AD2F9D3005B65F4 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8734FDA12AD2F9D3005B65F4 /* BlurView.swift */; };
+		8734FDA52AD2F9D3005B65F4 /* AlertToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8734FDA22AD2F9D3005B65F4 /* AlertToast.swift */; };
+		8734FDA62AD2F9D3005B65F4 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8734FDA32AD2F9D3005B65F4 /* ActivityIndicator.swift */; };
 		877A98902ACEE6770055AA13 /* UserDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877A988F2ACEE6770055AA13 /* UserDetailsViewModel.swift */; };
 		877A98922ACEE6E00055AA13 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877A98912ACEE6E00055AA13 /* UserDetails.swift */; };
 		877A98942ACEEA7D0055AA13 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877A98932ACEEA7D0055AA13 /* Repository.swift */; };
@@ -75,6 +78,9 @@
 		85790426FF023034B13085BF /* Pods-GitHubUsers-GitHubUsersUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitHubUsers-GitHubUsersUITests.release.xcconfig"; path = "Target Support Files/Pods-GitHubUsers-GitHubUsersUITests/Pods-GitHubUsers-GitHubUsersUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8734FD992AD291E7005B65F4 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		8734FD9C2AD29E3E005B65F4 /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
+		8734FDA12AD2F9D3005B65F4 /* BlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		8734FDA22AD2F9D3005B65F4 /* AlertToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertToast.swift; sourceTree = "<group>"; };
+		8734FDA32AD2F9D3005B65F4 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		877A988F2ACEE6770055AA13 /* UserDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewModel.swift; sourceTree = "<group>"; };
 		877A98912ACEE6E00055AA13 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		877A98932ACEEA7D0055AA13 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
@@ -164,8 +170,8 @@
 			children = (
 				625333CF2ACD10DD004976D9 /* GitHubUsersApp.swift */,
 				628BB0DC2ACD61D3003ED177 /* MainView.swift */,
-				8734FD9B2AD29E34005B65F4 /* Enums */,
 				87E480A02AD22EEA00D075A7 /* Managers */,
+				8734FD9B2AD29E34005B65F4 /* Enums */,
 				625354282ACE4F6400C760FD /* CommonViews */,
 				877A98952ACEEAB70055AA13 /* Models */,
 				628BB0D92ACD6174003ED177 /* UsersList */,
@@ -213,6 +219,7 @@
 		625354282ACE4F6400C760FD /* CommonViews */ = {
 			isa = PBXGroup;
 			children = (
+				8734FDA02AD2F9D3005B65F4 /* AlertToast */,
 				625354292ACE4F6D00C760FD /* WebView.swift */,
 			);
 			path = CommonViews;
@@ -260,6 +267,16 @@
 				8734FD9C2AD29E3E005B65F4 /* EndPoint.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		8734FDA02AD2F9D3005B65F4 /* AlertToast */ = {
+			isa = PBXGroup;
+			children = (
+				8734FDA12AD2F9D3005B65F4 /* BlurView.swift */,
+				8734FDA22AD2F9D3005B65F4 /* AlertToast.swift */,
+				8734FDA32AD2F9D3005B65F4 /* ActivityIndicator.swift */,
+			);
+			path = AlertToast;
 			sourceTree = "<group>";
 		};
 		877A98952ACEEAB70055AA13 /* Models */ = {
@@ -523,7 +540,9 @@
 				6253542A2ACE4F6D00C760FD /* WebView.swift in Sources */,
 				6253542C2ACE525700C760FD /* RepositoryDetailsView.swift in Sources */,
 				877A98942ACEEA7D0055AA13 /* Repository.swift in Sources */,
+				8734FDA42AD2F9D3005B65F4 /* BlurView.swift in Sources */,
 				628BB0DD2ACD61D3003ED177 /* MainView.swift in Sources */,
+				8734FDA52AD2F9D3005B65F4 /* AlertToast.swift in Sources */,
 				628BB0DB2ACD6184003ED177 /* UsersListViewModel.swift in Sources */,
 				877A98922ACEE6E00055AA13 /* UserDetails.swift in Sources */,
 				625333D02ACD10DD004976D9 /* GitHubUsersApp.swift in Sources */,
@@ -532,6 +551,7 @@
 				8734FD9D2AD29E3E005B65F4 /* EndPoint.swift in Sources */,
 				87E480A22AD22EFE00D075A7 /* UserDefaultsManager.swift in Sources */,
 				877A98902ACEE6770055AA13 /* UserDetailsViewModel.swift in Sources */,
+				8734FDA62AD2F9D3005B65F4 /* ActivityIndicator.swift in Sources */,
 				8734FD9A2AD291E7005B65F4 /* NetworkManager.swift in Sources */,
 				628BB0DF2ACD622F003ED177 /* UserItemView.swift in Sources */,
 				87E4809F2AD21FD300D075A7 /* User.swift in Sources */,

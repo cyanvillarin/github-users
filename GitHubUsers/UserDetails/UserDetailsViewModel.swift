@@ -18,6 +18,10 @@ class UserDetailsViewModel: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
     private var currentPage = 1
     
+    // observed by the View to know if we need to show toast message
+    @Published var shouldShowToastMessage = false
+    @Published var toastMessage: String? = nil
+    
     init(userName: String) {
         self.userName = userName
         Task {
@@ -33,7 +37,8 @@ class UserDetailsViewModel: ObservableObject {
         case .success(let userDetails):
             self.userDetails = userDetails
         case .failure(let error):
-            print("Something went wrong: \(error.localizedDescription)")
+            self.toastMessage = error.localizedDescription
+            self.shouldShowToastMessage = true
         }
     }
     
@@ -48,7 +53,8 @@ class UserDetailsViewModel: ObservableObject {
             repositoriesCopy.append(contentsOf: filteredRepos)
             self.repositories = repositoriesCopy
         case .failure(let error):
-            print("Something went wrong: \(error.localizedDescription)")
+            self.toastMessage = error.localizedDescription
+            self.shouldShowToastMessage = true
         }
     }
         

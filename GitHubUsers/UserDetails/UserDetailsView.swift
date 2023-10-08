@@ -99,6 +99,14 @@ struct UserDetailsView: View {
             
         }
         .navigationTitle(userName)
+        .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: 5) {
+            AlertToast(
+                displayMode: .banner(.slide),
+                type: .error(.red),
+                title: "An error has occured!",
+                subTitle: viewModel.toastMessage
+            )
+        }
     }
     
     // TODO: make this a common function
