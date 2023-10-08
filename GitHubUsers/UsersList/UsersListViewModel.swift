@@ -18,6 +18,8 @@ class UsersListViewModel: ObservableObject {
     // this contains all the users to be displayed on View
     private var users: [User] = []
     
+    private var lastId: Int64 = 0 // this is the id to be used from 'since' - for pagination
+    
     private var cancellable = Set<AnyCancellable>()  // same as DisposeBag
         
     let urlString = "https://api.github.com/users"
@@ -43,6 +45,9 @@ class UsersListViewModel: ObservableObject {
                 case .success(let response):
                     self.users = response
                     self.usersToDisplay = response
+                    if let lastId = response.last?.id {
+                        self.lastId = lastId
+                    }
                 case .failure:
                     self.users = []  // TODO: fix here
                 }
@@ -82,6 +87,7 @@ class UsersListViewModel: ObservableObject {
                         type: response.type
                     )
                     self.usersToDisplay = [user]
+
                 case .failure:
                     self.users = []
                 }
@@ -89,5 +95,36 @@ class UsersListViewModel: ObservableObject {
             .store(in: &cancellable)    // same as disposedBy
     }
     
+    func fetchAdditionalUsers() {
+        print("fetching additional users from user id: \(lastId)")
+        
+        guard let accessToken = ProcessInfo.processInfo.environment["ACCESS_TOKEN"] else { return }
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
+        
+        let urlWithSince = "\(urlString)?since=\(self.lastId)"
+        
+        AF.request(urlWithSince, method: .get, headers: headers)
+            .publishDecodable(type: [User].self)
+            .receive(on: DispatchQueue.main)    // set the scheduler
+            .print("users api response")        // same as debug
+            .sink { [weak self] response in     // same as onNext
+                guard let self else { return }
+                switch response.result {
+                case .success(let response):
+                    
+                    if let lastId = response.last?.id {
+                        self.lastId = lastId
+                    }
+                    
+                    var usersCopy = self.users
+                    usersCopy.append(contentsOf: response)
+                    self.users = usersCopy
+                    print("last user id: \(self.lastId)")
+                case .failure:
+                    print("Something bad happened")
+                }
+            }
+            .store(in: &cancellable)    // same as disposedBy
+    }
     
 }

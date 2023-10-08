@@ -20,6 +20,11 @@ struct UsersListView: View {
                 userName: user.userName,
                 userType: user.type
             )
+            .onAppear() {
+                if viewModel.users.last?.id == user.id {
+                    viewModel.fetchAdditionalUsers()
+                }
+            }
         }
         .navigationTitle("GitHub Users")
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always)) {
