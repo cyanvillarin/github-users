@@ -40,8 +40,8 @@ class UsersListViewModel: ObservableObject {
     }
     
     @MainActor private func fetchUsers() async {
-        let result: Result<[User], AFError> = await NetworkManager.shared.sendRequest(endpoint: .getUsers(lastUserId: 0))
-        print(result)
+        let endpoint = EndPoint.getUsers(lastUserId: 0)
+        let result: Result<[User], AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
         switch result {
         case .success(let users):
             self.allUsers = users

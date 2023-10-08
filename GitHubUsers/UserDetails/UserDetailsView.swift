@@ -92,7 +92,7 @@ struct UserDetailsView: View {
                 )
                 .onAppear() {
                     if viewModel.repositories.last?.id == repository.id {
-                        viewModel.fetchRepositories()
+                        Task { await viewModel.fetchRepositories() }
                     }
                 }
             }
