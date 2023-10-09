@@ -2,7 +2,7 @@
 //  UserDetailsViewModel.swift
 //  GitHubUsers
 //
-//  Created by CYAN on 2023/10/05.
+//  Created by Cyan Villarin on 2023/10/05.
 //
 
 import Combine
@@ -10,77 +10,64 @@ import Alamofire
 
 class UserDetailsViewModel: ObservableObject {
     
+    // observed by the View to display info
     @Published var userDetails: UserDetails? = nil
     @Published var repositories: [Repository] = []
     
-    private var cancellable = Set<AnyCancellable>()
-        
-    var userName: String
+    // observed by the View to know if we need to show toast message
+    @Published var shouldShowToastMessage = false
+    @Published var toastMessage: String? = nil
     
-    var reposCount: Int = 0
+    // updated when the user successfully display the repo
+    private var currentPage = 1
     
-    var currentPage = 1
+    // for initialization
+    private var userName: String
+    private var networkManager: NetworkManagerProtocol
     
-    init(userName: String) {
+    /// Initialize then fetch both user details and repositories' list at the same time
+    /// - Parameter userName: the parameter used for API calls
+    init(userName: String, networkManager: NetworkManagerProtocol) {
         self.userName = userName
-        fetchUserDetails()
-        fetchRepositories()
+        self.networkManager = networkManager
+        Task {
+            await fetchUserDetails()
+            await fetchRepositories()
+        }
     }
     
-    private func fetchUserDetails() {
-        
-        // TODO: Refactor this into like a global variable
-        guard let accessToken = ProcessInfo.processInfo.environment["ACCESS_TOKEN"] else { return }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
-        
-        let urlString = "https://api.github.com/users/\(userName)"
-        
-        AF.request(urlString, method: .get, headers: headers)
-            .publishDecodable(type: UserDetails.self)
-            .receive(on: DispatchQueue.main)    // set the scheduler
-            .sink { [weak self] response in     // same as onNext
-                guard let self else { return }
-                switch response.result {
-                case .success(let response):
-                    self.userDetails = response
-                case .failure:
-                    self.userDetails = nil
-                }
-            }
-            .store(in: &cancellable)    // same as disposedBy
+    /// Fetches the user's details for the header's top and bottom sections
+    @MainActor func fetchUserDetails() async {
+        let endpoint = EndPoint.getUserDetails(userName: userName)
+        let result: Result<UserDetails, AFError> = await networkManager.sendRequest(endpoint: endpoint)
+        switch result {
+        case .success(let userDetails):
+            self.userDetails = userDetails
+        case .failure(let error):
+            self.toastMessage = error.localizedDescription
+            self.shouldShowToastMessage = true
+        }
     }
     
-    func fetchRepositories() {
+    /// Fetches the repositories starting with currentPage = 1 then suddenly increasing by 1 everytime
+    @MainActor func fetchRepositories() async {
         
-        // TODO: Refactor this into like a global variable
-        guard let accessToken = ProcessInfo.processInfo.environment["ACCESS_TOKEN"] else { return }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(accessToken)"]
+        print("I am here AAA")
         
-        let urlString = "https://api.github.com/users/\(userName)/repos?per_page=30&page=\(currentPage)"
+        let endpoint = EndPoint.getRepositories(userName: userName, currentPage: currentPage)
+        let result: Result<[Repository], AFError> = await networkManager.sendRequest(endpoint: endpoint)
         
-        AF.request(urlString, method: .get, headers: headers)
-            .publishDecodable(type: [Repository].self)
-            .receive(on: DispatchQueue.main)    // set the scheduler
-            .print("users api response")        // same as debug
-            .sink { [weak self] response in     // same as onNext
-                guard let self else { return }
-                switch response.result {
-                case .success(let response):
-                    
-                    self.currentPage = self.currentPage + 1
-                    
-                    let repos = response
-                        .filter { !$0.isFork }
-                    
-                    var repositoriesCopy = self.repositories
-                    repositoriesCopy.append(contentsOf: repos)
-                    self.repositories = repositoriesCopy
-                    
-                case .failure:
-                    self.repositories = []
-                }
-            }
-            .store(in: &cancellable)    // same as disposedBy
+        switch result {    
+        case .success(let repositories):
+            self.currentPage = self.currentPage + 1
+            let filteredRepos = repositories.filter { !$0.isFork }
+            var repositoriesCopy = self.repositories
+            repositoriesCopy.append(contentsOf: filteredRepos)
+            self.repositories = repositoriesCopy
+            
+        case .failure(let error):
+            self.toastMessage = error.localizedDescription
+            self.shouldShowToastMessage = true
+        }
     }
-        
 }

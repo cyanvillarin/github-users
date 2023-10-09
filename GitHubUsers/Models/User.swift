@@ -2,13 +2,17 @@
 //  User.swift
 //  GitHubUsers
 //
-//  Created by CYAN on 2023/10/08.
+//  Created by Cyan Villarin on 2023/10/08.
 //
 
 import Foundation
 
-struct User: Decodable, Identifiable {
-    let id: Int64 // use the id for 'id' for Identifiable
+struct User: Decodable, Identifiable, Equatable {
+    
+    // for Identifiable
+    let id: Int64
+    
+    // for User
     let userName: String
     let avatarUrl: String
     let type: String

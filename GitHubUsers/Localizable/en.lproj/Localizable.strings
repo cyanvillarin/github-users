@@ -1,0 +1,23 @@
+/* 
+  Localizable.strings
+  GitHubUsers
+
+  Created by Cyan Villarin on 2023/10/09.
+  
+*/
+
+// Common
+"ToastErrorTitle" = "An error has occured!";
+
+// Users List
+"UserListTitle" = "GitHub Users";
+
+// User Details
+"Followers" = "Followers";
+"Following" = "Following";
+"RepositoriesListTitle" = "Repositories (Not including Forks)";
+
+// Repository Web View
+"RepositoryErrorMessage" = "Sorry, we couldn't load the URL for this repository.";
+
+

@@ -2,13 +2,15 @@
 //  Repository.swift
 //  GitHubUsers
 //
-//  Created by CYAN on 2023/10/05.
+//  Created by Cyan Villarin on 2023/10/05.
 //
 
 import Foundation
 
-struct Repository: Decodable, Identifiable {
-    let id: Int64           // use the id for 'id' for Identifiable
+struct Repository: Decodable, Identifiable, Equatable {
+    
+    // for Identifiable
+    let id: Int64
     let name: String
     let url: String
     let language: String?

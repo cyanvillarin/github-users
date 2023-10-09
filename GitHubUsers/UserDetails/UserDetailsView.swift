@@ -2,122 +2,83 @@
 //  UserDetailsView.swift
 //  GitHubUsers
 //
-//  Created by CyanCamit.Villari on 2023/10/04.
+//  Created by Cyan Villarin on 2023/10/04.
 //
 
 import SwiftUI
 import Combine
-import Kingfisher
 
 struct UserDetailsView: View {
     
     @StateObject var viewModel: UserDetailsViewModel
     
-    var userName: String
+    // for initialization
+    private var userName: String
     
-    // Seems like this is the workaround since we get this error message when we initialize ViewModel from our init()
-    // Cannot assign to property: 'viewModel' is a get-only property
+    // Seems like this is the workaround since we get this error message:
+    // [ Cannot assign to property: 'viewModel' is a get-only property ]
+    // when we initialize ViewModel from our init()
     init(userName: String) {
         self.userName = userName
-        _viewModel = StateObject(wrappedValue: UserDetailsViewModel(userName: userName))
+        _viewModel = StateObject(
+            wrappedValue: UserDetailsViewModel(
+                userName: userName,
+                networkManager: NetworkManager()
+            )
+        )
     }
     
     var body: some View {
         
-        VStack(spacing: 5) {
+        VStack(spacing: 0) {
             
-            // upper
-            HStack(spacing: 15) {
-                avatarView(viewModel.userDetails?.avatarUrl ?? "")  // TODO: improve this part
-                    .resizable()
-                    .startLoadingBeforeViewAppear()  // solution for messy List + KF issue if there is .frame modifier user
-                    .frame(width: 80, height: 80)
-                    .scaledToFit()
-                    .clipShape(Circle())
-                    .onAppear()
-                
-                Spacer().frame(width: 1)
-                
-                VStack {
-                    Text("\(viewModel.userDetails?.followers ?? 0)").bold()
-                    Text("Followers")
-                }
-                
-                VStack {
-                    Text("\(viewModel.userDetails?.following ?? 0)").bold()
-                    Text("Following")
+            // views for the header
+            if let userDetails = viewModel.userDetails {
+                VStack(spacing: 5) {
+                    Spacer().frame(height: 10)
+                    HeaderTopSection(userDetails: userDetails)
+                    Spacer().frame(height: 5)
+                    HeaderBottomSection(userDetails: userDetails)
+                    Spacer().frame(height: 15)
                 }
             }
             
-            Spacer().frame(height: 5)
-            
-            // lower
-            if let fullName = viewModel.userDetails?.fullName {
-                HStack {
-                    Text(fullName).bold()
-                    Spacer()
-                }
-                .padding(.leading, 33)
-                .padding(.trailing, 20)
-            }
-            
-            if let bio = viewModel.userDetails?.bio {
-                HStack {
-                    Text(bio)
-                    Spacer()
-                }
-                .padding(.leading, 33)
-                .padding(.trailing, 20)
-            }
-            
-            if let company = viewModel.userDetails?.company {
-                HStack {
-                    Text(company)
-                    Spacer()
-                }
-                .padding(.leading, 33)
-                .padding(.trailing, 20)
-            }
-            
-            Spacer().frame(height: 5)
-            
-            // repo list
-            List(viewModel.repositories) { repository in
-                RepositoryItemView(
-                    url: repository.url,
-                    name: repository.name,
-                    numberOfStars: repository.stars,
-                    devLanguage: repository.language,
-                    description: repository.description
-                )
-                .onAppear() {
-                    if viewModel.repositories.last?.id == repository.id {
-                        viewModel.fetchRepositories()
+            // repositories list
+            // fetch additional repos when the user goes at the bottom of the list
+            List {
+                Section {
+                    ForEach(viewModel.repositories) { repository in
+                        RepositoryItemView(
+                            url: repository.url,
+                            name: repository.name,
+                            numberOfStars: repository.stars,
+                            devLanguage: repository.language,
+                            description: repository.description
+                        )
+                        .onAppear() {
+                            // when the user goes to the bottom of the list, fetch new repos
+                            if viewModel.repositories.last?.id == repository.id {
+                                Task { await viewModel.fetchRepositories() }
+                            }
+                        }
                     }
+                } header: {
+                    Text(Localizable.repositoriesListTitle)
                 }
             }
-            
+            // explicitly set the style to insetGroup to have padding on every sides
+            .listStyle(.insetGrouped)
+        }
+        .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: Constants.toastDisplayDuration) {
+            AlertToast(
+                displayMode: .banner(.slide),
+                type: .error(.red),
+                title: Localizable.toastErrorTitle,
+                subTitle: viewModel.toastMessage
+            )
         }
         .navigationTitle(userName)
     }
-    
-    // TODO: make this a common function
-    func avatarView(_ urlString: String) -> KFImage {
-        
-        let url = URL(string: urlString)
-        
-        let defaultImage = Image("DefaultUserLogo")
-            .resizable()
-            .frame(width: 50, height: 50)
-        
-        let image = KFImage(url)
-            .placeholder { defaultImage }
-            .retry(maxCount: 3, interval: .seconds(5))
-            .cacheOriginalImage()
-        
-        return image
-    }
-    
 }
 
 struct UserDetailsView_Previews: PreviewProvider {
