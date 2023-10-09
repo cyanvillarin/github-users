@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Repository: Decodable, Identifiable {
+struct Repository: Decodable, Identifiable, Equatable {
     
     // for Identifiable
     let id: Int64

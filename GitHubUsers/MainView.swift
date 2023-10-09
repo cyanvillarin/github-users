@@ -9,12 +9,8 @@ import SwiftUI
 
 /*
  TODO:
- - Code Refactoring for API
- - Code Refactoring for Views
  - Add the reason for iOS 15 for the 'searchable' function
  - Add instructions on the README (and explain that the accessToken is deleted on Github when the token is committed). Mention that I will send the accessToken through email. Also include step-by-step screenshots for setting on the Xcode's environment
- - Add Unit Tests
- - Add Localization
  - Create demo videos
 */
 

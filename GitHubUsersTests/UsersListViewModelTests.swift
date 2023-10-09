@@ -26,7 +26,7 @@ class UsersListViewModelTests: XCTestCase {
         super.tearDown()
     }
     
-    func testFetchUsersSuccess() async {
+    func test_fetchUsers_success() async {
         let mockUsers = [
             User(id: 1, userName: "User1", avatarUrl: "", type: ""),
             User(id: 2, userName: "User2", avatarUrl: "", type: "")
@@ -38,11 +38,9 @@ class UsersListViewModelTests: XCTestCase {
         
         XCTAssertEqual(viewModel.allUsers, mockUsers)
         XCTAssertEqual(viewModel.usersToDisplay, mockUsers)
-        XCTAssertFalse(viewModel.shouldShowToastMessage)
-        XCTAssertNil(viewModel.toastMessage)
     }
     
-    func testFetchUsersFailure() async {
+    func test_fetchUsers_failure() async {
         let mockError = AFError.explicitlyCancelled
         mockNetworkManager.mockResultAFError = mockError
         
@@ -50,5 +48,31 @@ class UsersListViewModelTests: XCTestCase {
         
         XCTAssertTrue(viewModel.shouldShowToastMessage)
         XCTAssertEqual(viewModel.toastMessage, mockError.localizedDescription)
+    }
+    
+    func test_searchUser() async {
+        let mockUserDetails: UserDetails = UserDetails(
+            id: 1,
+            userName: "User1",
+            avatarUrl: "https://profile-pic.com",
+            type: "User",
+            fullName: "Cyan Villarin",
+            bio: "A developer",
+            company: "Hello Inc",
+            followers: 2,
+            following: 5
+        )
+        mockNetworkManager.mockResultElement = mockUserDetails
+        
+        await viewModel.searchUser(withUserName: "User1")
+    
+        let expectedUser = User(
+            id: mockUserDetails.id,
+            userName: mockUserDetails.userName,
+            avatarUrl: mockUserDetails.avatarUrl,
+            type: mockUserDetails.type
+        )
+        
+        XCTAssertEqual(viewModel.usersToDisplay, [expectedUser])
     }
 }

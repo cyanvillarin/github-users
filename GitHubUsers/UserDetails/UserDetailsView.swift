@@ -20,7 +20,12 @@ struct UserDetailsView: View {
     // when we initialize ViewModel from our init()
     init(userName: String) {
         self.userName = userName
-        _viewModel = StateObject(wrappedValue: UserDetailsViewModel(userName: userName))
+        _viewModel = StateObject(
+            wrappedValue: UserDetailsViewModel(
+                userName: userName,
+                networkManager: NetworkManager()
+            )
+        )
     }
     
     var body: some View {
