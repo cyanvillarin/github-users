@@ -2,7 +2,7 @@
 //  HeaderTopSection.swift
 //  GitHubUsers
 //
-//  Created by CYAN on 2023/10/09.
+//  Created by Cyan Villarin on 2023/10/09.
 //
 
 import SwiftUI

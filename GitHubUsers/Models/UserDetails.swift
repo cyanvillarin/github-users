@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UserDetails: Decodable, Identifiable {
+struct UserDetails: Decodable, Identifiable, Equatable {
     
     // for Identifiable
     let id: Int64

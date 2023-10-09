@@ -29,10 +29,14 @@ class UsersListViewModel: ObservableObject {
     // same as DisposeBag
     private var cancellable = Set<AnyCancellable>()
     
+    // for initialization
+    private var networkManager: NetworkManagerProtocol
+    
     /// binds searchText
     /// as well as fetches the initial users for the list
-    init() {
-        bindData()
+    init(networkManager: NetworkManagerProtocol) {
+        self.networkManager = networkManager
+        self.bindData()
         Task { await fetchUsers() }
     }
     
@@ -50,9 +54,9 @@ class UsersListViewModel: ObservableObject {
     
     /// initial fetch for the users, so the lastUserId for the 'since' query parameter is 0
     /// updates the retrieved users list's last user ID as the lastUserId for 'since' the next time fetchAdditionalUsers is called
-    @MainActor private func fetchUsers() async {
+    @MainActor func fetchUsers() async {
         let endpoint = EndPoint.getUsers(lastUserId: 0)
-        let result: Result<[User], AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
+        let result: Result<[User], AFError> = await networkManager.sendRequest(endpoint: endpoint)
         switch result {
         case .success(let users):
             self.allUsers = users
@@ -68,7 +72,7 @@ class UsersListViewModel: ObservableObject {
     
     /// searches for a user using the userDetails API
     /// - Parameter searchText: the username to be used for userDetails API
-    @MainActor private func searchUser(withUserName searchText: String) async {
+    @MainActor func searchUser(withUserName searchText: String) async {
         // if 'searchText' is an empty string, display 'allUsers'
         if searchText == String.emptyString {
             usersToDisplay = allUsers
@@ -86,7 +90,7 @@ class UsersListViewModel: ObservableObject {
         
         // if the user is not on the list, search for it
         let endpoint = EndPoint.getUserDetails(userName: searchText)
-        let result: Result<UserDetails, AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
+        let result: Result<UserDetails, AFError> = await networkManager.sendRequest(endpoint: endpoint)
         
         switch result {    
         case .success(let userDetails):
@@ -109,7 +113,7 @@ class UsersListViewModel: ObservableObject {
     /// a bit different from fetchUsers as after the response is retrieved, it is appended to the allUsers list
     @MainActor func fetchAdditionalUsers() async {
         let endpoint = EndPoint.getUsers(lastUserId: self.lastUserId)
-        let result: Result<[User], AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
+        let result: Result<[User], AFError> = await networkManager.sendRequest(endpoint: endpoint)
         switch result {
         case .success(let users):
             if let lastId = users.last?.id {

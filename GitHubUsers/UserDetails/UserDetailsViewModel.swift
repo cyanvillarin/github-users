@@ -18,19 +18,18 @@ class UserDetailsViewModel: ObservableObject {
     @Published var shouldShowToastMessage = false
     @Published var toastMessage: String? = nil
     
-    // same as DisposeBag
-    private var cancellable = Set<AnyCancellable>()
-    
     // updated when the user successfully display the repo
     private var currentPage = 1
     
     // for initialization
     private var userName: String
+    private var networkManager: NetworkManagerProtocol
     
     /// Initialize then fetch both user details and repositories' list at the same time
     /// - Parameter userName: the parameter used for API calls
-    init(userName: String) {
+    init(userName: String, networkManager: NetworkManagerProtocol) {
         self.userName = userName
+        self.networkManager = networkManager
         Task {
             await fetchUserDetails()
             await fetchRepositories()
@@ -38,9 +37,9 @@ class UserDetailsViewModel: ObservableObject {
     }
     
     /// Fetches the user's details for the header's top and bottom sections
-    @MainActor private func fetchUserDetails() async {
+    @MainActor func fetchUserDetails() async {
         let endpoint = EndPoint.getUserDetails(userName: userName)
-        let result: Result<UserDetails, AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
+        let result: Result<UserDetails, AFError> = await networkManager.sendRequest(endpoint: endpoint)
         switch result {
         case .success(let userDetails):
             self.userDetails = userDetails
@@ -52,8 +51,11 @@ class UserDetailsViewModel: ObservableObject {
     
     /// Fetches the repositories starting with currentPage = 1 then suddenly increasing by 1 everytime
     @MainActor func fetchRepositories() async {
+        
+        print("I am here AAA")
+        
         let endpoint = EndPoint.getRepositories(userName: userName, currentPage: currentPage)
-        let result: Result<[Repository], AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
+        let result: Result<[Repository], AFError> = await networkManager.sendRequest(endpoint: endpoint)
         
         switch result {    
         case .success(let repositories):

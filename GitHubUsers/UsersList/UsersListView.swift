@@ -10,7 +10,7 @@ import Combine
 
 struct UsersListView: View {
     
-    @StateObject var viewModel = UsersListViewModel()
+    @StateObject var viewModel = UsersListViewModel(networkManager: NetworkManager())
     @State private var searchText = String.emptyString
     
     var body: some View {
