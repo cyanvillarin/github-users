@@ -42,17 +42,21 @@ Features:
 
     ![image](https://github.com/cyanvillarin/github-users/assets/10018971/bc5e1e78-ac8d-4958-b40d-b0403ae996ef)
 
-4. Repository webview
+3. Repository webview
     - Displays a ```ProgressView()``` while the page is still loading
     - Display error message if failed to load the page
 
     ![image](https://github.com/cyanvillarin/github-users/assets/10018971/25e30139-6317-450c-a217-91ac0de7eb8d)
   
-5. Unit Tests for the ViewModels only
+4. Unit Tests for the ViewModels only
     - UsersListViewModelTests
     - UserDetailsViewModelTests
 
     ![image](https://github.com/cyanvillarin/github-users/assets/10018971/087d7713-5d67-492a-8fca-4035eb19aba6)
+
+5. Localization for both English and Japanese
+
+   ![image](https://github.com/cyanvillarin/github-users/assets/10018971/414d5aae-30eb-4e22-89eb-e117add88782)
 
 
 
