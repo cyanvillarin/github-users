@@ -9,10 +9,15 @@ import SwiftUI
 
 extension UserDetailsView {
     struct HeaderBottomSection: View {
+        
+        // for initialization
         var userDetails: UserDetails
         init(userDetails: UserDetails) {
             self.userDetails = userDetails
         }
+        
+        // the bottom section which includes fullName, bio, then company
+        // displays details only if not nil
         var body: some View {
             if let fullName = userDetails.fullName {
                 HStack {

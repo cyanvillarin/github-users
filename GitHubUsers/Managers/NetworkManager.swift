@@ -13,11 +13,6 @@ class NetworkManager {
     // singleton because this will be used all through-out the project
     static let shared = NetworkManager()
     
-    // constants
-    static let baseUrl = "https://api.github.com"
-    static let usersPageLimit = 30
-    static let reposPageLimit = 30
-    
     // an async function with generic type
     func sendRequest<Element: Decodable>(endpoint: EndPoint) async -> Result<Element, AFError> {
         let accessToken = ProcessInfo.processInfo.environment["ACCESS_TOKEN"]

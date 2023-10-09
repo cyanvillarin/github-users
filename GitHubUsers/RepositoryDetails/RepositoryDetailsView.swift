@@ -13,6 +13,9 @@ struct RepositoryDetailsView: View {
     @State private var error: Error? = nil
     let url: URL?
     
+    // loads a webview that is the same height as the screen
+    // displays error message if it fails
+    // displays a progress view while it is still loading the web view
     var body: some View {
         ZStack {
             if let error = error {
@@ -25,12 +28,9 @@ struct RepositoryDetailsView: View {
                                 .frame(height: geometry.size.height)
                         }
                     }
-                    if isLoading {
-                        ProgressView()
-                    }
+                    if isLoading { ProgressView() }
                 } else {
-                    Text("Sorry, we couldn't load the URL for this repository.")
-                        .foregroundColor(.pink)
+                    Text(Localizable.repositoryErrorMessage).foregroundColor(.pink)
                 }
             }
         }

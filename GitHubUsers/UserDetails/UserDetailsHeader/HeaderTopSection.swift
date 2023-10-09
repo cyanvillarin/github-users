@@ -10,10 +10,14 @@ import Kingfisher
 
 extension UserDetailsView {
     struct HeaderTopSection: View {
+        
+        // for initialization
         var userDetails: UserDetails
         init(userDetails: UserDetails) {
             self.userDetails = userDetails
         }
+        
+        // the top section which includes the picture, followers, and following
         var body: some View {
             HStack(spacing: 15) {
                 avatarView(userDetails.avatarUrl)
@@ -28,19 +32,19 @@ extension UserDetailsView {
                 
                 VStack {
                     Text("\(userDetails.followers)").bold()
-                    Text("Followers")
+                    Text(Localizable.followers)
                 }
                 
                 VStack {
                     Text("\(userDetails.following)").bold()
-                    Text("Following")
+                    Text(Localizable.following)
                 }
             }
         }
         
         func avatarView(_ urlString: String) -> KFImage {
             let url = URL(string: urlString)
-            let defaultImage = Image("DefaultUserLogo")
+            let defaultImage = Image(Constants.defaultUserLogo)
                 .resizable()
                 .frame(width: 50, height: 50)
             let image = KFImage(url)

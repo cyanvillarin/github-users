@@ -11,7 +11,7 @@ import Combine
 struct UsersListView: View {
     
     @StateObject var viewModel = UsersListViewModel()
-    @State private var searchText = ""
+    @State private var searchText = String.emptyString
     
     var body: some View {
         List(viewModel.usersToDisplay) { user in
@@ -26,7 +26,7 @@ struct UsersListView: View {
                 }
             }
         }
-        .navigationTitle("GitHub Users")
+        .navigationTitle(Localizable.usersListTitle)
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always)) {
             ForEach(UserDefaultsManager.shared.getSearchUserHistory(), id: \.self) { suggestion in
                 Text(suggestion).searchCompletion(suggestion)
@@ -35,11 +35,11 @@ struct UsersListView: View {
         .onChange(of: searchText) { searchText in
             viewModel.searchText = searchText
         }
-        .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: 5) {
+        .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: Constants.toastDisplayDuration) {
             AlertToast(
                 displayMode: .banner(.slide),
                 type: .error(.red),
-                title: "An error has occured!",
+                title: Localizable.toastErrorTitle,
                 subTitle: viewModel.toastMessage
             )
         }

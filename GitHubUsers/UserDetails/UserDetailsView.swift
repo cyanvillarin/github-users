@@ -12,7 +12,8 @@ struct UserDetailsView: View {
     
     @StateObject var viewModel: UserDetailsViewModel
     
-    var userName: String
+    // for initialization
+    private var userName: String
     
     // Seems like this is the workaround since we get this error message:
     // [ Cannot assign to property: 'viewModel' is a get-only property ]
@@ -24,43 +25,54 @@ struct UserDetailsView: View {
     
     var body: some View {
         
-        VStack(spacing: 5) {
+        VStack(spacing: 0) {
             
-            // header
+            // views for the header
             if let userDetails = viewModel.userDetails {
-                HeaderTopSection(userDetails: userDetails)
-                Spacer().frame(height: 5)
-                HeaderBottomSection(userDetails: userDetails)
-                Spacer().frame(height: 5)
-            }
-            
-            // repo list
-            List(viewModel.repositories) { repository in
-                RepositoryItemView(
-                    url: repository.url,
-                    name: repository.name,
-                    numberOfStars: repository.stars,
-                    devLanguage: repository.language,
-                    description: repository.description
-                )
-                .onAppear() {
-                    // when the user goes to the bottom of the list, fetch new repos
-                    if viewModel.repositories.last?.id == repository.id {
-                        Task { await viewModel.fetchRepositories() }
-                    }
+                VStack(spacing: 5) {
+                    Spacer().frame(height: 10)
+                    HeaderTopSection(userDetails: userDetails)
+                    Spacer().frame(height: 5)
+                    HeaderBottomSection(userDetails: userDetails)
+                    Spacer().frame(height: 15)
                 }
             }
             
+            // repositories list
+            // fetch additional repos when the user goes at the bottom of the list
+            List {
+                Section {
+                    ForEach(viewModel.repositories) { repository in
+                        RepositoryItemView(
+                            url: repository.url,
+                            name: repository.name,
+                            numberOfStars: repository.stars,
+                            devLanguage: repository.language,
+                            description: repository.description
+                        )
+                        .onAppear() {
+                            // when the user goes to the bottom of the list, fetch new repos
+                            if viewModel.repositories.last?.id == repository.id {
+                                Task { await viewModel.fetchRepositories() }
+                            }
+                        }
+                    }
+                } header: {
+                    Text(Localizable.repositoriesListTitle)
+                }
+            }
+            // explicitly set the style to insetGroup to have padding on every sides
+            .listStyle(.insetGrouped)
         }
-        .navigationTitle(userName)
-        .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: 5) {
+        .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: Constants.toastDisplayDuration) {
             AlertToast(
                 displayMode: .banner(.slide),
                 type: .error(.red),
-                title: "An error has occured!",
+                title: Localizable.toastErrorTitle,
                 subTitle: viewModel.toastMessage
             )
         }
+        .navigationTitle(userName)
     }
 }
 
