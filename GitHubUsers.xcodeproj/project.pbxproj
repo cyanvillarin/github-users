@@ -283,8 +283,16 @@
 			isa = PBXGroup;
 			children = (
 				87346DA52AD38931005467D8 /* String.swift */,
+				87346DA72AD3B66F005467D8 /* Localizable */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		87346DA72AD3B66F005467D8 /* Localizable */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Localizable;
 			sourceTree = "<group>";
 		};
 		8734FD9B2AD29E34005B65F4 /* Enums */ = {

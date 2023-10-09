@@ -15,6 +15,7 @@
 // User Details
 "Followers" = "Followers";
 "Following" = "Following";
+"RepositoriesListTitle" = "Repositories (Not including Forks)";
 
 // Repository Web View
 "RepositoryErrorMessage" = "Sorry, we couldn't load the URL for this repository.";

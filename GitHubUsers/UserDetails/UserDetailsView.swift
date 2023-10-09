@@ -25,36 +25,45 @@ struct UserDetailsView: View {
     
     var body: some View {
         
-        VStack(spacing: 5) {
+        VStack(spacing: 0) {
             
             // views for the header
             if let userDetails = viewModel.userDetails {
-                HeaderTopSection(userDetails: userDetails)
-                Spacer().frame(height: 5)
-                HeaderBottomSection(userDetails: userDetails)
-                Spacer().frame(height: 5)
+                VStack(spacing: 5) {
+                    Spacer().frame(height: 10)
+                    HeaderTopSection(userDetails: userDetails)
+                    Spacer().frame(height: 5)
+                    HeaderBottomSection(userDetails: userDetails)
+                    Spacer().frame(height: 10)
+                }
             }
             
             // repositories list
             // fetch additional repos when the user goes at the bottom of the list
-            List(viewModel.repositories) { repository in
-                RepositoryItemView(
-                    url: repository.url,
-                    name: repository.name,
-                    numberOfStars: repository.stars,
-                    devLanguage: repository.language,
-                    description: repository.description
-                )
-                .onAppear() {
-                    // when the user goes to the bottom of the list, fetch new repos
-                    if viewModel.repositories.last?.id == repository.id {
-                        Task { await viewModel.fetchRepositories() }
+            List {
+                Section {
+                    ForEach(viewModel.repositories) { repository in
+                        RepositoryItemView(
+                            url: repository.url,
+                            name: repository.name,
+                            numberOfStars: repository.stars,
+                            devLanguage: repository.language,
+                            description: repository.description
+                        )
+                        .onAppear() {
+                            // when the user goes to the bottom of the list, fetch new repos
+                            if viewModel.repositories.last?.id == repository.id {
+                                Task { await viewModel.fetchRepositories() }
+                            }
+                        }
                     }
+                } header: {
+                    Text(Localizable.repositoriesListTitle)
                 }
             }
-            
+            // explicitly set the style to insetGroup to have padding on every sides
+            .listStyle(.insetGrouped)
         }
-        .navigationTitle(userName)
         .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: Constants.toastDisplayDuration) {
             AlertToast(
                 displayMode: .banner(.slide),
@@ -63,6 +72,7 @@ struct UserDetailsView: View {
                 subTitle: viewModel.toastMessage
             )
         }
+        .navigationTitle(userName)
     }
 }
 

@@ -19,6 +19,7 @@ struct Localizable {
     // User Details
     static let followers = NSLocalizedString("Followers", comment: "")
     static let following = NSLocalizedString("Following", comment: "")
+    static let repositoriesListTitle = NSLocalizedString("RepositoriesListTitle", comment: "")
 
     // Repository Web View
     static let repositoryErrorMessage = NSLocalizedString("RepositoryErrorMessage", comment: "")

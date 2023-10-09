@@ -15,6 +15,7 @@
 // User Details
 "Followers" = "フォロワー";
 "Following" = "フォロイー";
+"RepositoriesListTitle" = "リポジトリ（フォーク除く）";
 
 // Repository Web View
 "RepositoryErrorMessage" = "申し訳ありません！このリポジトリのURLを読み込むことができませんでした。";
