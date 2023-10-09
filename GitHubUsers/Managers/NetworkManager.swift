@@ -8,7 +8,7 @@
 import Alamofire
 import Combine
 
-class NetworkManager {
+class NetworkManager: NetworkManagerProtocol {
     
     // singleton because this will be used all through-out the project
     static let shared = NetworkManager()
