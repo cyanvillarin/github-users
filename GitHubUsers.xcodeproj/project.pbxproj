@@ -185,8 +185,7 @@
 				628BB0DC2ACD61D3003ED177 /* MainView.swift */,
 				87346DA02AD3862A005467D8 /* Constants.swift */,
 				87346DA42AD38927005467D8 /* Extensions */,
-				87346DA22AD38722005467D8 /* Localizable.swift */,
-				87346D9E2AD3853E005467D8 /* Localizable.strings */,
+				87346DA72AD3B66F005467D8 /* Localizable */,
 				877A98952ACEEAB70055AA13 /* Models */,
 				87E480A02AD22EEA00D075A7 /* Managers */,
 				8734FD9B2AD29E34005B65F4 /* Enums */,
@@ -283,7 +282,6 @@
 			isa = PBXGroup;
 			children = (
 				87346DA52AD38931005467D8 /* String.swift */,
-				87346DA72AD3B66F005467D8 /* Localizable */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -291,6 +289,8 @@
 		87346DA72AD3B66F005467D8 /* Localizable */ = {
 			isa = PBXGroup;
 			children = (
+				87346DA22AD38722005467D8 /* Localizable.swift */,
+				87346D9E2AD3853E005467D8 /* Localizable.strings */,
 			);
 			path = Localizable;
 			sourceTree = "<group>";

@@ -34,7 +34,7 @@ struct UserDetailsView: View {
                     HeaderTopSection(userDetails: userDetails)
                     Spacer().frame(height: 5)
                     HeaderBottomSection(userDetails: userDetails)
-                    Spacer().frame(height: 10)
+                    Spacer().frame(height: 15)
                 }
             }
             
