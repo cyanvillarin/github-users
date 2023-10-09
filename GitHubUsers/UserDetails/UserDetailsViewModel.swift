@@ -52,8 +52,6 @@ class UserDetailsViewModel: ObservableObject {
     /// Fetches the repositories starting with currentPage = 1 then suddenly increasing by 1 everytime
     @MainActor func fetchRepositories() async {
         
-        print("I am here AAA")
-        
         let endpoint = EndPoint.getRepositories(userName: userName, currentPage: currentPage)
         let result: Result<[Repository], AFError> = await networkManager.sendRequest(endpoint: endpoint)
         
