@@ -11,7 +11,7 @@ import Alamofire
 class UsersListViewModel: ObservableObject {
     
     // set from the view when user types in the search bar
-    @Published var searchText = ""
+    @Published var searchText = String.emptyString
     
     // observed by the View to know which items to display (filtered when using the searchBar)
     @Published var usersToDisplay: [User] = []
@@ -29,11 +29,14 @@ class UsersListViewModel: ObservableObject {
     // same as DisposeBag
     private var cancellable = Set<AnyCancellable>()
     
+    /// binds searchText
+    /// as well as fetches the initial users for the list
     init() {
         bindData()
         Task { await fetchUsers() }
     }
     
+    /// binds searchText to search for user when user types in the search bar
     private func bindData() {
         $searchText
             .debounce(for: .seconds(0.75), scheduler: RunLoop.main)
@@ -45,6 +48,8 @@ class UsersListViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
+    /// initial fetch for the users, so the lastUserId for the 'since' query parameter is 0
+    /// updates the retrieved users list's last user ID as the lastUserId for 'since' the next time fetchAdditionalUsers is called
     @MainActor private func fetchUsers() async {
         let endpoint = EndPoint.getUsers(lastUserId: 0)
         let result: Result<[User], AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)
@@ -61,9 +66,11 @@ class UsersListViewModel: ObservableObject {
         }
     }
     
+    /// searches for a user using the userDetails API
+    /// - Parameter searchText: the username to be used for userDetails API
     @MainActor private func searchUser(withUserName searchText: String) async {
         // if 'searchText' is an empty string, display 'allUsers'
-        if searchText == "" {
+        if searchText == String.emptyString {
             usersToDisplay = allUsers
             return
         }
@@ -99,6 +106,7 @@ class UsersListViewModel: ObservableObject {
         }
     }
     
+    /// a bit different from fetchUsers as after the response is retrieved, it is appended to the allUsers list
     @MainActor func fetchAdditionalUsers() async {
         let endpoint = EndPoint.getUsers(lastUserId: self.lastUserId)
         let result: Result<[User], AFError> = await NetworkManager.shared.sendRequest(endpoint: endpoint)

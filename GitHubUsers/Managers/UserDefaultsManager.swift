@@ -12,12 +12,9 @@ class UserDefaultsManager {
     // singleton because this will be used all through-out the project
     static let shared = UserDefaultsManager()
     
-    // keys
-    static let searchedUsersKey = "searchedUsers"
-    
     // just return empty List if it is not yet saved
     private func getSearchedUsers() -> [String] {
-        let searchedUsers = UserDefaults.standard.array(forKey: UserDefaultsManager.searchedUsersKey) as? [String]
+        let searchedUsers = UserDefaults.standard.array(forKey: Constants.searchedUsersKey) as? [String]
         return searchedUsers ?? []
     }
     
@@ -34,6 +31,6 @@ class UserDefaultsManager {
             searchedUsers.removeAll(where: { $0 == item })
         }
         searchedUsers.append(item)
-        UserDefaults.standard.set(searchedUsers, forKey: UserDefaultsManager.searchedUsersKey)
+        UserDefaults.standard.set(searchedUsers, forKey: Constants.searchedUsersKey)
     }
 }

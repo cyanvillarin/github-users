@@ -12,7 +12,8 @@ struct UserDetailsView: View {
     
     @StateObject var viewModel: UserDetailsViewModel
     
-    var userName: String
+    // for initialization
+    private var userName: String
     
     // Seems like this is the workaround since we get this error message:
     // [ Cannot assign to property: 'viewModel' is a get-only property ]
@@ -26,7 +27,7 @@ struct UserDetailsView: View {
         
         VStack(spacing: 5) {
             
-            // header
+            // views for the header
             if let userDetails = viewModel.userDetails {
                 HeaderTopSection(userDetails: userDetails)
                 Spacer().frame(height: 5)
@@ -34,7 +35,8 @@ struct UserDetailsView: View {
                 Spacer().frame(height: 5)
             }
             
-            // repo list
+            // repositories list
+            // fetch additional repos when the user goes at the bottom of the list
             List(viewModel.repositories) { repository in
                 RepositoryItemView(
                     url: repository.url,
@@ -53,11 +55,11 @@ struct UserDetailsView: View {
             
         }
         .navigationTitle(userName)
-        .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: 5) {
+        .toast(isPresenting: $viewModel.shouldShowToastMessage, duration: Constants.toastDisplayDuration) {
             AlertToast(
                 displayMode: .banner(.slide),
                 type: .error(.red),
-                title: "An error has occured!",
+                title: Localizable.toastErrorTitle,
                 subTitle: viewModel.toastMessage
             )
         }

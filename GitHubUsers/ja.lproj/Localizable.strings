@@ -1,0 +1,20 @@
+/* 
+  Localizable.strings
+  GitHubUsers
+
+  Created by Cyan Villarin on 2023/10/09.
+  
+*/
+
+// Common
+"ToastErrorTitle" = "エラーが発生しました！";
+
+// Users List
+"UserListTitle" = "ギットハッブユーザー";
+
+// User Details
+"Followers" = "フォロワー";
+"Following" = "フォロイー";
+
+// Repository Web View
+"RepositoryErrorMessage" = "申し訳ありません！このリポジトリのURLを読み込むことができませんでした。";

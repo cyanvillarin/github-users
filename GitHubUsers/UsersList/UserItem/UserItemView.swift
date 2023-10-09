@@ -53,7 +53,7 @@ struct UserItemView: View {
         
         let url = URL(string: avatarUrlString)
         
-        let defaultImage = Image("DefaultUserLogo")
+        let defaultImage = Image(Constants.defaultUserLogo)
             .resizable()
             .frame(width: 50, height: 50)
         

@@ -18,17 +18,17 @@ enum EndPoint {
     var queryParams: String? {
         switch self {
         case .getUsers(let lastUserId):
-            return "per_page=\(NetworkManager.usersPageLimit)&since=\(lastUserId)"
+            return "per_page=\(Constants.usersPageLimit)&since=\(lastUserId)"
         case .getUserDetails:
             return nil
         case .getRepositories(_ , let currentPage):
-            return "per_page=\(NetworkManager.reposPageLimit)&page=\(currentPage)"
+            return "per_page=\(Constants.reposPageLimit)&page=\(currentPage)"
         }
     }
     
     // the urlString to be used, add queryParams if needed
     var urlString: String {
-        let baseUrl = NetworkManager.baseUrl
+        let baseUrl = Constants.baseUrl
         var path: String {
             switch self {
             case .getUsers(_):
