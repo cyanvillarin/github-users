@@ -1,5 +1,9 @@
 # github-users
 
+Made with love using SwiftUI :)
+
+![image](https://github.com/cyanvillarin/github-users/assets/10018971/336dd3a5-44e3-48be-89e6-c2b1737d6f03)
+
 To run properly, please do the following:
 1. Select 'GitHubUsers' target
 2. Go to Edit Scheme
@@ -28,11 +32,6 @@ Features:
     - Searched users saved on UserDefaults
     - Scrolling to the bottom of the list will fetch additional users
     - Displays a toast message when error occurs
-  
-    ![image](https://github.com/cyanvillarin/github-users/assets/10018971/e7e785e1-4806-4cd2-b00f-adc3dc13d22d)
-    ![image](https://github.com/cyanvillarin/github-users/assets/10018971/84714432-3c56-4e8a-b1a9-6196d7476b2a)
-    ![image](https://github.com/cyanvillarin/github-users/assets/10018971/183c4e3a-f214-4cb5-8e52-087e39049ab0)
-    ![image](https://github.com/cyanvillarin/github-users/assets/10018971/4bfc9519-7a0a-4e94-b197-573761fff35d)
 
 2. User Details screen
     - Has username, avatar picture, followers, following, fullname, bio, and company
@@ -40,19 +39,13 @@ Features:
     - Scrolling to the bottom of the list will fetch additional repositories
     - Displays a toast message when error occurs
 
-    ![image](https://github.com/cyanvillarin/github-users/assets/10018971/bc5e1e78-ac8d-4958-b40d-b0403ae996ef)
-
 3. Repository webview
     - Displays a ```ProgressView()``` while the page is still loading
     - Display error message if failed to load the page
-
-    ![image](https://github.com/cyanvillarin/github-users/assets/10018971/25e30139-6317-450c-a217-91ac0de7eb8d)
   
 4. Unit Tests for the ViewModels only
     - UsersListViewModelTests
     - UserDetailsViewModelTests
-
-    ![image](https://github.com/cyanvillarin/github-users/assets/10018971/087d7713-5d67-492a-8fca-4035eb19aba6)
 
 5. Localization for both English and Japanese
 
